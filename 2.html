@@ -4,59 +4,32 @@
 <meta charset="UTF-8">
 <style>
     /* --- Resets e Fontes Básicas --- */
-    body, div, h6, table, thead, tbody, tr, th, td, span, a, button {
-        margin: 0;
-        padding: 0;
-        border: 0;
-        outline: 0;
-        vertical-align: baseline;
+    body, div, h6, table, thead, tbody, tr, th, td, span, a, button, details, summary {
+        margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline;
     }
     body {
-        font-size: 12px;
-        color: #595959;
-        font-family: Arial, Helvetica, sans-serif;
-        line-height: 20px;
-        background-color: #e0e0e0;
-        height: 100vh; 
-        margin: 0;
-        padding: 0; 
+        font-size: 12px; color: #595959; font-family: Arial, Helvetica, sans-serif;
+        line-height: 20px; background-color: #e0e0e0; height: 100vh; margin: 0; padding: 0; 
     }
-    a {
-        text-decoration: none;
-        color: #2b6893; /* Azul padrão de links do sistema */
-    }
+    a { text-decoration: none; color: #2b6893; }
 
     /* --- Estrutura Principal do Modal --- */
     .ui-dialog {
-        position: absolute;
-        padding: 5px;
-        background: #585858;
-        border-radius: 5px;
-        font-size: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        position: absolute; padding: 5px; background: #585858; border-radius: 5px;
+        font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-
-    /* --- Cabeçalho do Modal --- */
     .ui-dialog-titlebar {
-        height: 36px;
-        background: #efefef;
-        border-bottom: 1px solid #cdcdcd;
-        font-weight: bold;
-        cursor: move;
-        border-radius: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between; 
-        padding-left: 12px; 
-        padding-right: 4px; 
+        height: 36px; background: #efefef; border-bottom: 1px solid #cdcdcd; font-weight: bold;
+        cursor: move; border-radius: 2px; display: flex; align-items: center; justify-content: space-between; 
+        padding-left: 12px; padding-right: 4px; 
     }
     .ui-dialog-title { line-height: 36px; }
     .ui-dialog-titlebar-buttons { display: flex; align-items: center; gap: 2px; }
 
-    /* --- Botões do Cabeçalho e Ícones --- */
+    /* --- Botões do Cabeçalho --- */
     .wijmo-wijdialog-captionbutton {
-        display: flex; align-items: center; justify-content: center;
-        background: transparent; border-radius: 2px; height: 18px; width: 19px;
+        display: flex; align-items: center; justify-content: center; background: transparent;
+        border-radius: 2px; height: 18px; width: 19px;
     }
     .wijmo-wijdialog-captionbutton:hover { background: #ddd; }
     .ui-icon {
@@ -68,30 +41,27 @@
     .ui-icon-minus { background-position: -48px -128px; }
     .ui-icon-extlink { background-position: -32px -80px; }
     .ui-icon-close { background-position: -80px -128px; }
-    .ui-icon-carat-1-n { background-position: 0px 0px; }
 
     /* --- Conteúdo Interno --- */
     .ui-dialog-content {
-        position: relative; overflow: auto; padding: 10px 12px;
+        position: relative; overflow-y: auto; padding: 10px 12px;
         background: #FAFAFA; border-radius: 0 0 2px 2px;
+        max-height: 65vh; /* Evita que o modal fique maior que a tela */
     }
 
-    /* --- Widget Interno e Título --- */
+    /* --- Widget Interno e Tabela --- */
     .widget {
-        background: #f9f9f9; border: 1px solid #cdcdcd; margin-top: 10px;
-        box-shadow: 0 1px 0 #fff; border-radius: 3px;
+        background: #f9f9f9; border: 1px solid #cdcdcd; margin-top: 10px; box-shadow: 0 1px 0 #fff; border-radius: 3px;
     }
     .widget .title {
-        height: 36px; background: #efefef; border-bottom: 1px solid #cdcdcd;
-        border-radius: 3px 3px 0 0; display: flex; align-items: center; padding: 0 12px;
+        height: 36px; background: #efefef; border-bottom: 1px solid #cdcdcd; border-radius: 3px 3px 0 0;
+        display: flex; align-items: center; padding: 0 12px;
     }
     .widget .title h6 { font-size: 12px; font-weight: bold; }
-
-    /* --- Tabela --- */
     .sTable { width: 100%; border-collapse: collapse; }
     .sTable th {
-        text-align: left; padding: 8px 12px; border-bottom: 1px solid #cdcdcd;
-        background: #f4f4f4; font-weight: bold; white-space: nowrap; 
+        text-align: left; padding: 8px 12px; border-bottom: 1px solid #cdcdcd; background: #f4f4f4;
+        font-weight: bold; white-space: nowrap; 
     }
     .sTable td { padding: 8px 12px; vertical-align: middle; }
     .sTable tbody tr { border-top: 1px solid #e4e4e4; }
@@ -103,100 +73,73 @@
     .button {
         font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: nowrap; cursor: pointer;
         font-family: Arial, Helvetica, sans-serif; line-height: 12px; display: inline-block; max-height: 29px;
-        padding: 7px 15px; box-sizing: border-box;
-        background-image: url('https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png');
-        background-repeat: repeat-x;
+        padding: 7px 15px; box-sizing: border-box; background-image: url('https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png'); background-repeat: repeat-x;
     }
     .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; color: #fff; }
 
-    /* --- SISTEMA DE ABAS (TABS) --- */
+    /* --- SISTEMA DE ABAS E COLAPSES --- */
     #relatorioContainer {
-        display: none; 
-        margin-top: 20px;
-        border: 1px solid #cdcdcd;
-        background: #fff;
-        border-radius: 3px;
+        display: none; margin-top: 20px; border: 1px solid #cdcdcd; background: #fff; border-radius: 3px;
     }
-    
     .tabs-header {
-        display: flex;
-        background: #efefef;
-        border-bottom: 1px solid #cdcdcd;
-        border-radius: 3px 3px 0 0;
+        display: flex; background: #efefef; border-bottom: 1px solid #cdcdcd; border-radius: 3px 3px 0 0;
     }
-    
     .tab-btn {
-        background: none;
-        border: none;
-        border-right: 1px solid #cdcdcd;
-        padding: 10px 15px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: bold;
-        color: #595959;
-        transition: background 0.2s, color 0.2s;
+        background: none; border: none; border-right: 1px solid #cdcdcd; padding: 10px 15px;
+        cursor: pointer; font-size: 12px; font-weight: bold; color: #595959; transition: background 0.2s, color 0.2s;
     }
-    
     .tab-btn:hover { background: #e4e4e4; }
-    
-    /* Aba ativa: fundo branco e texto azul, sem borda verde */
-    .tab-btn.active {
-        background: #fff;
-        color: #2b6893; /* Azul do sistema DocZ */
-    }
+    .tab-btn.active { background: #fff; color: #2b6893; }
+    .tab-content { display: none; padding: 15px; font-size: 12px; color: #444; line-height: 1.6; }
+    .tab-content.active { display: block; }
 
-    .tab-content {
-        display: none; 
-        padding: 15px;
-        font-size: 12px;
-        color: #444;
-        line-height: 1.5;
-    }
+    /* Estilo das seções de informação */
+    .info-block { margin-bottom: 15px; }
+    .info-block strong { color: #333; }
+    .info-title { font-size: 13px; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 8px; color: #2b6893; margin-top: 15px;}
     
-    .tab-content.active {
-        display: block; 
+    /* Estilo dos Collapses (Sanfonas) */
+    .docz-collapse { margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 3px; background: #fdfdfd; }
+    .docz-collapse summary {
+        padding: 8px 12px; font-weight: bold; cursor: pointer; background: #f4f4f4; border-radius: 3px; outline: none;
     }
-
+    .docz-collapse summary:hover { background: #eee; }
+    .docz-collapse .collapse-content { padding: 10px 12px; border-top: 1px solid #e0e0e0; }
+    .cert-item { padding: 6px 0; border-bottom: 1px dashed #ddd; }
+    .cert-item:last-child { border-bottom: none; }
 </style>
 </head>
 <body>
 
-<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable wijmo-wijdialog" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialogHistoricoAssinaturas" 
-     style="display: block; z-index: 1006; height: auto; width: 900px; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable wijmo-wijdialog" tabindex="-1" role="dialog" 
+     style="display: block; z-index: 1006; width: 900px; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     
     <div class="ui-dialog-titlebar ui-widget-header ui-corner-all">
-        <span class="ui-dialog-title" id="ui-dialog-title-dialogHistoricoAssinaturas">Histórico de Assinaturas</span>
-        
+        <span class="ui-dialog-title">Histórico de Assinaturas</span>
         <div class="ui-dialog-titlebar-buttons">
-            <a href="#" class="wijmo-wijdialog-titlebar-close ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-close">close</span></a>
+            <a href="#" class="wijmo-wijdialog-titlebar-close ui-corner-all wijmo-wijdialog-captionbutton"><span class="ui-icon ui-icon-close">close</span></a>
         </div>
     </div>
     
-    <div id="dialogHistoricoAssinaturas" style="width: auto; min-height: 400px; height: auto;" class="ui-dialog-content ui-widget-content">
+    <div id="dialogHistoricoAssinaturas" class="ui-dialog-content ui-widget-content">
         
         <div class="widget">
-            <div class="title">
-                <h6 id="nomeArquivoTitulo">DC00146G20052979SOS_2_NORMAL.pdf</h6>
-            </div>
-            <table id="tabelaHistoricoAssinaturas" class="sTable">
+            <div class="title"><h6>DC00146G20052979SOS_2_NORMAL.pdf</h6></div>
+            <table class="sTable">
                 <thead>
                     <tr>
-                        <th width="5%">N°</th>
-                        <th width="15%">Ação</th>
-                        <th width="20%">Tipo de Assinatura</th>
-                        <th width="20%">Usuário</th>
-                        <th width="15%">Data</th>
-                        <th width="25%">Validação da Assinatura</th>
+                        <th width="5%">N°</th><th width="15%">Ação</th><th width="20%">Tipo de Assinatura</th>
+                        <th width="20%">Usuário</th><th width="15%">Data</th><th width="25%">Validação da Assinatura</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>ASSINA</td>
-                        <td>Assinatura Individual (Arquivo)</td>
-                        <td>NATHÁLIA NOVAIS MATTOS</td>
-                        <td>26/02/2026 18:09:17<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
-                        <td>Certificado válido</td>
+                        <td>1</td><td>ASSINA</td><td>Assinatura Individual (Arquivo)</td><td>NATHÁLIA NOVAIS MATTOS</td>
+                        <td>26/02/2026 18:09:17<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td><td>Certificado válido</td>
+                    </tr>
+                    <tr>
+                        <td>2</td><td>CHANCELA</td><td>Assinatura Individual (Arquivo)</td><td>LEONARDO ALVES</td>
+                        <td>26/02/2026 18:11:42<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td><td>Documento alterado após assinatura</td>
                     </tr>
                 </tbody>
             </table>
@@ -209,29 +152,101 @@
         <div id="relatorioContainer">
             <div class="tabs-header">
                 <button class="tab-btn active" onclick="openTab(event, 'tabGeral')">Visão Geral</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabCertificados')">Certificados</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabIntegridade')">Integridade</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss1')">Assinatura 1 (18/09/2025)</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss2')">Assinatura 2 (26/02/2026)</button>
             </div>
             
             <div id="tabGeral" class="tab-content active">
-                <strong>Resumo do Documento:</strong><br>
-                O documento possui 1 assinatura(s) válida(s). Nenhuma alteração não autorizada foi detectada após a aplicação da assinatura final.
+                <div class="info-title">Verificação</div>
+                <div class="info-block">
+                    <strong>Nome:</strong> Validar<br>
+                    <strong>Data de validação:</strong> 26/03/2026 16:39:17 BRT<br>
+                    <strong>Versão (Verificador):</strong> 2.21.1.2 | <strong>Versão (Validador):</strong> 3.0.5.2<br>
+                    <strong>Fonte de verificação:</strong> Offline
+                </div>
+
+                <div class="info-title">Informações do Arquivo</div>
+                <div class="info-block">
+                    <strong>Nome do arquivo:</strong> f3fa13ce-0d43-46f5-b064-beb47bdb5be4.pdf<br>
+                    <strong>Resumo SHA256:</strong> 737836f5a5e9295f844a7161e5c5d2e589f8debe75b32eaa05cf8232c4668746<br>
+                    <strong>Tipo:</strong> PDF | <strong>Assinaturas:</strong> 2 (2 ancoradas)
+                </div>
+
+                <div class="info-title">Políticas e Listas</div>
+                <div class="info-block">
+                    <strong>PA (Política de Assinatura):</strong> Válida (de 13/05/2018 até 01/03/2029) | OID: PA_AD_RB_v2_3.der<br>
+                    <strong>LPA (Lista de Políticas):</strong> Válida (LPA CAdES v2) | Próxima emissão: 06/04/2026<br>
+                </div>
             </div>
             
-            <div id="tabCertificados" class="tab-content">
-                <strong>Detalhes do Certificado:</strong><br>
-                - Assinante: NATHÁLIA NOVAIS MATTOS<br>
-                - Emissor: ICP-Brasil<br>
-                - Validade: Válido até 10/12/2027<br>
-                - Status Revogação: OK (Não revogado)
+            <div id="tabAss1" class="tab-content">
+                <div class="info-block">
+                    <strong>Assinante:</strong> CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, L=Brasilia, ST=DF, O=ICP-Brasil, C=BR<br>
+                    <strong>CNPJ:</strong> 04.744.134/0001-78 | <strong>CPF do Rep.:</strong> ***.663.981-**<br>
+                    <strong>Data assinatura:</strong> 18/09/2025 20:23:31 BRT<br>
+                    <strong>Tipo:</strong> Destacada | <strong>Status:</strong> Indeterminada<br>
+                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada<br>
+                    <strong>Mensagem:</strong> Não foi possível identificar se existem modificações incrementais
+                </div>
+
+                <details class="docz-collapse">
+                    <summary>Certificados Utilizados</summary>
+                    <div class="collapse-content">
+                        <div class="cert-item">CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, OU=AC CERTIFICA ANAPOLIS v5...</div>
+                        <div class="cert-item">CN=AC CERTIFICA ANAPOLIS v5, OU=AC SOLUTI v5, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=AC SOLUTI v5, OU=Autoridade Certificadora Raiz Brasileira v5, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=Autoridade Certificadora Raiz Brasileira v5, OU=ITI, O=ICP-Brasil, C=BR</div>
+                    </div>
+                </details>
+
+                <details class="docz-collapse">
+                    <summary>Atributos Usados</summary>
+                    <div class="collapse-content">
+                        <strong>Obrigatórios:</strong> IdMessageDigest (Valid), IdContentType (Valid), IdAaEtsSigPolicyId (Valid), IdAaSigningCertificateV2 (Valid), SignatureDictionary (Valid)<br>
+                        <strong>Opcionais:</strong> IdAaSignatureTimeStampToken (Valid)
+                    </div>
+                </details>
+
+                <details class="docz-collapse">
+                    <summary>Carimbo de Tempo (IdAaSignatureTimeStampToken)</summary>
+                    <div class="collapse-content">
+                        <strong>Assinante:</strong> CN=SERVIDOR DE CARIMBO DO TEMPO ACT BRy 50151, O=ICP-Brasil, C=BR<br>
+                        <strong>Data do carimbo:</strong> 18/09/2025 20:23:31 BRT<br>
+                        <strong>Estrutura:</strong> Em conformidade | <strong>Status atributos:</strong> Aprovados
+                    </div>
+                </details>
             </div>
             
-            <div id="tabIntegridade" class="tab-content">
-                <strong>Verificação de Integridade (Hash):</strong><br>
-                O hash criptográfico calculado corresponde ao hash assinado originalmente. A cadeia de confiança está intacta e carimbo do tempo foi validado com sucesso.
+            <div id="tabAss2" class="tab-content">
+                <div class="info-block">
+                    <strong>Assinante:</strong> CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, L=Brasilia, ST=DF, O=ICP-Brasil, C=BR<br>
+                    <strong>CNPJ:</strong> 04.744.134/0001-78 | <strong>CPF do Rep.:</strong> ***.663.981-**<br>
+                    <strong>Data assinatura:</strong> 26/02/2026 21:09:17 BRT<br>
+                    <strong>Tipo:</strong> Destacada | <strong>Status:</strong> Indeterminada<br>
+                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada<br>
+                    <strong>Mensagem:</strong> Não foi possível identificar se existem modificações incrementais
+                </div>
+
+                <details class="docz-collapse">
+                    <summary>Certificados Utilizados</summary>
+                    <div class="collapse-content">
+                        <div class="cert-item">CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, OU=AC CERTIFICA ANAPOLIS v5...</div>
+                        <div class="cert-item">CN=AC CERTIFICA ANAPOLIS v5, OU=AC SOLUTI v5, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=AC SOLUTI v5, OU=Autoridade Certificadora Raiz Brasileira v5, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=Autoridade Certificadora Raiz Brasileira v5, OU=ITI, O=ICP-Brasil, C=BR</div>
+                    </div>
+                </details>
+
+                <details class="docz-collapse">
+                    <summary>Atributos Usados</summary>
+                    <div class="collapse-content">
+                        <strong>Obrigatórios:</strong> IdMessageDigest (Valid), IdContentType (Valid), IdAaEtsSigPolicyId (Valid), IdAaSigningCertificateV2 (Valid), SignatureDictionary (Valid)<br>
+                        <strong>Opcionais:</strong> Não possui.
+                    </div>
+                </details>
             </div>
+
         </div>
-        
     </div>
 </div>
 
@@ -240,6 +255,8 @@
         var relatorio = document.getElementById("relatorioContainer");
         if (relatorio.style.display === "none" || relatorio.style.display === "") {
             relatorio.style.display = "block";
+            // Rolagem suave para as abas quando abertas
+            relatorio.scrollIntoView({ behavior: 'smooth', block: 'end' });
         } else {
             relatorio.style.display = "none";
         }
@@ -247,21 +264,15 @@
 
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
-        
-        // Esconde todo o conteúdo
         tabcontent = document.getElementsByClassName("tab-content");
         for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
             tabcontent[i].classList.remove("active");
         }
-        
-        // Remove a classe "active" das abas (retirando o azul)
         tablinks = document.getElementsByClassName("tab-btn");
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].classList.remove("active");
         }
-        
-        // Mostra o conteúdo da aba e deixa o texto do botão clicado azul
         document.getElementById(tabName).style.display = "block";
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
