@@ -17,14 +17,13 @@
         font-family: Arial, Helvetica, sans-serif;
         line-height: 20px;
         background-color: #e0e0e0;
-        /* Adicionado para garantir que a tela tenha 100% da altura e o centro seja exato */
         height: 100vh; 
         margin: 0;
         padding: 0; 
     }
     a {
         text-decoration: none;
-        color: #222222;
+        color: #2b6893; /* Azul padrão de links do sistema */
     }
 
     /* --- Estrutura Principal do Modal --- */
@@ -51,40 +50,19 @@
         padding-left: 12px; 
         padding-right: 4px; 
     }
-    
-    .ui-dialog-title {
-        line-height: 36px;
-    }
-
-    .ui-dialog-titlebar-buttons {
-        display: flex;
-        align-items: center;
-        gap: 2px; 
-    }
+    .ui-dialog-title { line-height: 36px; }
+    .ui-dialog-titlebar-buttons { display: flex; align-items: center; gap: 2px; }
 
     /* --- Botões do Cabeçalho e Ícones --- */
     .wijmo-wijdialog-captionbutton {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        border-radius: 2px;
-        height: 18px;
-        width: 19px;
+        display: flex; align-items: center; justify-content: center;
+        background: transparent; border-radius: 2px; height: 18px; width: 19px;
     }
-    .wijmo-wijdialog-captionbutton:hover {
-        background: #ddd; 
-    }
-
+    .wijmo-wijdialog-captionbutton:hover { background: #ddd; }
     .ui-icon {
-        width: 16px;
-        height: 16px;
-        display: block;
-        text-indent: -99999px;
-        overflow: hidden;
+        width: 16px; height: 16px; display: block; text-indent: -99999px; overflow: hidden;
         background-image: url('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/images/ui-icons_222222_256x240.png'); 
     }
-
     .ui-icon-pin-w { background-position: -128px -144px; }
     .ui-icon-refresh { background-position: -64px -80px; }
     .ui-icon-minus { background-position: -48px -128px; }
@@ -94,88 +72,89 @@
 
     /* --- Conteúdo Interno --- */
     .ui-dialog-content {
-        position: relative;
-        overflow: auto;
-        padding: 10px 12px;
-        background: #FAFAFA;
-        border-radius: 0 0 2px 2px;
+        position: relative; overflow: auto; padding: 10px 12px;
+        background: #FAFAFA; border-radius: 0 0 2px 2px;
     }
 
     /* --- Widget Interno e Título --- */
     .widget {
-        background: #f9f9f9;
-        border: 1px solid #cdcdcd;
-        margin-top: 10px;
-        box-shadow: 0 1px 0 #fff;
-        border-radius: 3px;
+        background: #f9f9f9; border: 1px solid #cdcdcd; margin-top: 10px;
+        box-shadow: 0 1px 0 #fff; border-radius: 3px;
     }
     .widget .title {
-        height: 36px;
+        height: 36px; background: #efefef; border-bottom: 1px solid #cdcdcd;
+        border-radius: 3px 3px 0 0; display: flex; align-items: center; padding: 0 12px;
+    }
+    .widget .title h6 { font-size: 12px; font-weight: bold; }
+
+    /* --- Tabela --- */
+    .sTable { width: 100%; border-collapse: collapse; }
+    .sTable th {
+        text-align: left; padding: 8px 12px; border-bottom: 1px solid #cdcdcd;
+        background: #f4f4f4; font-weight: bold; white-space: nowrap; 
+    }
+    .sTable td { padding: 8px 12px; vertical-align: middle; }
+    .sTable tbody tr { border-top: 1px solid #e4e4e4; }
+    .sTable tbody tr:first-child { border-top: none; }
+    .sTable tbody tr:nth-child(even) { background-color: #fcfcfc; }
+
+    /* --- Rodapé e Botão --- */
+    .dialog-footer { margin-top: 15px; display: flex; justify-content: flex-end; }
+    .button {
+        font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: nowrap; cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif; line-height: 12px; display: inline-block; max-height: 29px;
+        padding: 7px 15px; box-sizing: border-box;
+        background-image: url('https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png');
+        background-repeat: repeat-x;
+    }
+    .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; color: #fff; }
+
+    /* --- SISTEMA DE ABAS (TABS) --- */
+    #relatorioContainer {
+        display: none; 
+        margin-top: 20px;
+        border: 1px solid #cdcdcd;
+        background: #fff;
+        border-radius: 3px;
+    }
+    
+    .tabs-header {
+        display: flex;
         background: #efefef;
         border-bottom: 1px solid #cdcdcd;
         border-radius: 3px 3px 0 0;
-        display: flex;
-        align-items: center;
-        padding: 0 12px;
-    }
-    .widget .title h6 {
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    /* --- Tabela --- */
-    .sTable {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .sTable th {
-        text-align: left;
-        padding: 8px 12px;
-        border-bottom: 1px solid #cdcdcd;
-        background: #f4f4f4;
-        font-weight: bold;
-        white-space: nowrap; 
-    }
-    .sTable td {
-        padding: 8px 12px;
-        vertical-align: middle;
-    }
-    .sTable tbody tr {
-        border-top: 1px solid #e4e4e4;
-    }
-    .sTable tbody tr:first-child {
-        border-top: none;
-    }
-    .sTable tbody tr:nth-child(even) {
-        background-color: #fcfcfc;
-    }
-
-    /* --- Rodapé e Botão --- */
-    .dialog-footer {
-        margin-top: 15px;
-        display: flex;
-        justify-content: flex-end; 
     }
     
-    .button, button, input[type=submit], input[type=reset], input[type=button] {
-        font-size: 10px;
-        font-weight: bold;
-        background-image: url('https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png');
-        background-repeat: repeat-x;
-        text-transform: uppercase;
-        white-space: nowrap;
+    .tab-btn {
+        background: none;
+        border: none;
+        border-right: 1px solid #cdcdcd;
+        padding: 10px 15px;
         cursor: pointer;
-        font-family: Arial, Helvetica, sans-serif;
-        line-height: 12px;
-        display: inline-block;
-        max-height: 29px;
-        padding: 7px 15px; 
-        box-sizing: border-box; 
+        font-size: 12px;
+        font-weight: bold;
+        color: #595959;
+        transition: background 0.2s, color 0.2s;
     }
-    .greenB {
-        background-position: 0 -425px;
-        border: 1px solid #7ca82a;
-        color: #fff;
+    
+    .tab-btn:hover { background: #e4e4e4; }
+    
+    /* Aba ativa: fundo branco e texto azul, sem borda verde */
+    .tab-btn.active {
+        background: #fff;
+        color: #2b6893; /* Azul do sistema DocZ */
+    }
+
+    .tab-content {
+        display: none; 
+        padding: 15px;
+        font-size: 12px;
+        color: #444;
+        line-height: 1.5;
+    }
+    
+    .tab-content.active {
+        display: block; 
     }
 
 </style>
@@ -189,11 +168,6 @@
         <span class="ui-dialog-title" id="ui-dialog-title-dialogHistoricoAssinaturas">Histórico de Assinaturas</span>
         
         <div class="ui-dialog-titlebar-buttons">
-            <a href="#" class="wijmo-wijdialog-titlebar-pin ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-pin-w">pin</span></a>
-            <a href="#" class="wijmo-wijdialog-titlebar-refresh ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-refresh">refresh</span></a>
-            <a href="#" class="wijmo-wijdialog-titlebar-toggle ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-carat-1-n">toggle</span></a>
-            <a href="#" class="wijmo-wijdialog-titlebar-minimize ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-minus">minimize</span></a>
-            <a href="#" class="wijmo-wijdialog-titlebar-maximize ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-extlink">maximize</span></a>
             <a href="#" class="wijmo-wijdialog-titlebar-close ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-close">close</span></a>
         </div>
     </div>
@@ -224,32 +198,75 @@
                         <td>26/02/2026 18:09:17<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
                         <td>Certificado válido</td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>CHANCELA</td>
-                        <td>Assinatura Individual (Arquivo)</td>
-                        <td>LEONARDO ALVES</td>
-                        <td>26/02/2026 18:11:42<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
-                        <td>Documento alterado após assinatura</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>ASSINA</td>
-                        <td>Assinatura por Certificado</td>
-                        <td>GRUPO AUDITORIA G1</td>
-                        <td>26/02/2026 18:14:05<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
-                        <td>Integridade confirmada</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
         
         <div class="dialog-footer">
-            <a href="#" class="button greenB">Visualizar Relatório de Conformidade</a>
+            <button class="button greenB" onclick="toggleRelatorio()">Visualizar Relatório de Conformidade</button>
+        </div>
+        
+        <div id="relatorioContainer">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="openTab(event, 'tabGeral')">Visão Geral</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabCertificados')">Certificados</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabIntegridade')">Integridade</button>
+            </div>
+            
+            <div id="tabGeral" class="tab-content active">
+                <strong>Resumo do Documento:</strong><br>
+                O documento possui 1 assinatura(s) válida(s). Nenhuma alteração não autorizada foi detectada após a aplicação da assinatura final.
+            </div>
+            
+            <div id="tabCertificados" class="tab-content">
+                <strong>Detalhes do Certificado:</strong><br>
+                - Assinante: NATHÁLIA NOVAIS MATTOS<br>
+                - Emissor: ICP-Brasil<br>
+                - Validade: Válido até 10/12/2027<br>
+                - Status Revogação: OK (Não revogado)
+            </div>
+            
+            <div id="tabIntegridade" class="tab-content">
+                <strong>Verificação de Integridade (Hash):</strong><br>
+                O hash criptográfico calculado corresponde ao hash assinado originalmente. A cadeia de confiança está intacta e carimbo do tempo foi validado com sucesso.
+            </div>
         </div>
         
     </div>
 </div>
+
+<script>
+    function toggleRelatorio() {
+        var relatorio = document.getElementById("relatorioContainer");
+        if (relatorio.style.display === "none" || relatorio.style.display === "") {
+            relatorio.style.display = "block";
+        } else {
+            relatorio.style.display = "none";
+        }
+    }
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        
+        // Esconde todo o conteúdo
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        
+        // Remove a classe "active" das abas (retirando o azul)
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+        
+        // Mostra o conteúdo da aba e deixa o texto do botão clicado azul
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+</script>
 
 </body>
 </html>
