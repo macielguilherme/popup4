@@ -21,7 +21,7 @@
         /* Estilo da mensagem */
         .alert-message { font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 25px; padding: 0 10px; }
         
-        /* Ícone de sucesso (usando caractere para simplificar, mas você pode trocar por uma img do seu sistema) */
+        /* Ícone de sucesso */
         .icon-success { font-size: 36px; color: #7ca82a; margin-bottom: 15px; display: block; }
 
         /* Botão Padrão do Sistema */
@@ -61,15 +61,15 @@
                 Clique no ícone de <strong>Histórico de Assinaturas</strong> para ver os detalhes.
             </div>
 
-            <button class="button" onclick="fecharPopup()">OK, ENTENDI</button>
+            <button class="button" onclick="irParaProximaPagina()">OK, ENTENDI</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Função simples para fechar a popup (esconde o backdrop)
-    function fecharPopup() {
-        document.getElementById('termo-backdrop').style.display = 'none';
+    // Função que faz o redirecionamento para 2.html
+    function irParaProximaPagina() {
+        window.location.href = '2.html';
     }
 </script>
 
