@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+    /* --- Resets e Fontes Básicas --- */
+    body, div, h6, table, thead, tbody, tr, th, td, span, a, button {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        vertical-align: baseline;
+    }
+    body {
+        font-size: 12px;
+        color: #595959;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 20px;
+        background-color: #e0e0e0;
+        /* Adicionado para garantir que a tela tenha 100% da altura e o centro seja exato */
+        height: 100vh; 
+        margin: 0;
+        padding: 0; 
+    }
+    a {
+        text-decoration: none;
+        color: #222222;
+    }
+
+    /* --- Estrutura Principal do Modal --- */
+    .ui-dialog {
+        position: absolute;
+        padding: 5px;
+        background: #585858;
+        border-radius: 5px;
+        font-size: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    /* --- Cabeçalho do Modal --- */
+    .ui-dialog-titlebar {
+        height: 36px;
+        background: #efefef;
+        border-bottom: 1px solid #cdcdcd;
+        font-weight: bold;
+        cursor: move;
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; 
+        padding-left: 12px; 
+        padding-right: 4px; 
+    }
+    
+    .ui-dialog-title {
+        line-height: 36px;
+    }
+
+    .ui-dialog-titlebar-buttons {
+        display: flex;
+        align-items: center;
+        gap: 2px; 
+    }
+
+    /* --- Botões do Cabeçalho e Ícones --- */
+    .wijmo-wijdialog-captionbutton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border-radius: 2px;
+        height: 18px;
+        width: 19px;
+    }
+    .wijmo-wijdialog-captionbutton:hover {
+        background: #ddd; 
+    }
+
+    .ui-icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+        text-indent: -99999px;
+        overflow: hidden;
+        background-image: url('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/images/ui-icons_222222_256x240.png'); 
+    }
+
+    .ui-icon-pin-w { background-position: -128px -144px; }
+    .ui-icon-refresh { background-position: -64px -80px; }
+    .ui-icon-minus { background-position: -48px -128px; }
+    .ui-icon-extlink { background-position: -32px -80px; }
+    .ui-icon-close { background-position: -80px -128px; }
+    .ui-icon-carat-1-n { background-position: 0px 0px; }
+
+    /* --- Conteúdo Interno --- */
+    .ui-dialog-content {
+        position: relative;
+        overflow: auto;
+        padding: 10px 12px;
+        background: #FAFAFA;
+        border-radius: 0 0 2px 2px;
+    }
+
+    /* --- Widget Interno e Título --- */
+    .widget {
+        background: #f9f9f9;
+        border: 1px solid #cdcdcd;
+        margin-top: 10px;
+        box-shadow: 0 1px 0 #fff;
+        border-radius: 3px;
+    }
+    .widget .title {
+        height: 36px;
+        background: #efefef;
+        border-bottom: 1px solid #cdcdcd;
+        border-radius: 3px 3px 0 0;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+    }
+    .widget .title h6 {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* --- Tabela --- */
+    .sTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .sTable th {
+        text-align: left;
+        padding: 8px 12px;
+        border-bottom: 1px solid #cdcdcd;
+        background: #f4f4f4;
+        font-weight: bold;
+        white-space: nowrap; 
+    }
+    .sTable td {
+        padding: 8px 12px;
+        vertical-align: middle;
+    }
+    .sTable tbody tr {
+        border-top: 1px solid #e4e4e4;
+    }
+    .sTable tbody tr:first-child {
+        border-top: none;
+    }
+    .sTable tbody tr:nth-child(even) {
+        background-color: #fcfcfc;
+    }
+
+    /* --- Rodapé e Botão --- */
+    .dialog-footer {
+        margin-top: 15px;
+        display: flex;
+        justify-content: flex-end; 
+    }
+    
+    .button, button, input[type=submit], input[type=reset], input[type=button] {
+        font-size: 10px;
+        font-weight: bold;
+        background-image: url('https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png');
+        background-repeat: repeat-x;
+        text-transform: uppercase;
+        white-space: nowrap;
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 12px;
+        display: inline-block;
+        max-height: 29px;
+        padding: 7px 15px; 
+        box-sizing: border-box; 
+    }
+    .greenB {
+        background-position: 0 -425px;
+        border: 1px solid #7ca82a;
+        color: #fff;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable wijmo-wijdialog" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialogHistoricoAssinaturas" 
+     style="display: block; z-index: 1006; height: auto; width: 900px; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all">
+        <span class="ui-dialog-title" id="ui-dialog-title-dialogHistoricoAssinaturas">Histórico de Assinaturas</span>
+        
+        <div class="ui-dialog-titlebar-buttons">
+            <a href="#" class="wijmo-wijdialog-titlebar-pin ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-pin-w">pin</span></a>
+            <a href="#" class="wijmo-wijdialog-titlebar-refresh ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-refresh">refresh</span></a>
+            <a href="#" class="wijmo-wijdialog-titlebar-toggle ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-carat-1-n">toggle</span></a>
+            <a href="#" class="wijmo-wijdialog-titlebar-minimize ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-minus">minimize</span></a>
+            <a href="#" class="wijmo-wijdialog-titlebar-maximize ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-extlink">maximize</span></a>
+            <a href="#" class="wijmo-wijdialog-titlebar-close ui-corner-all wijmo-wijdialog-captionbutton" role="button"><span class="ui-icon ui-icon-close">close</span></a>
+        </div>
+    </div>
+    
+    <div id="dialogHistoricoAssinaturas" style="width: auto; min-height: 400px; height: auto;" class="ui-dialog-content ui-widget-content">
+        
+        <div class="widget">
+            <div class="title">
+                <h6 id="nomeArquivoTitulo">DC00146G20052979SOS_2_NORMAL.pdf</h6>
+            </div>
+            <table id="tabelaHistoricoAssinaturas" class="sTable">
+                <thead>
+                    <tr>
+                        <th width="5%">N°</th>
+                        <th width="15%">Ação</th>
+                        <th width="20%">Tipo de Assinatura</th>
+                        <th width="20%">Usuário</th>
+                        <th width="15%">Data</th>
+                        <th width="25%">Validação da Assinatura</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>ASSINA</td>
+                        <td>Assinatura Individual (Arquivo)</td>
+                        <td>NATHÁLIA NOVAIS MATTOS</td>
+                        <td>26/02/2026 18:09:17<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
+                        <td>Certificado válido</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>CHANCELA</td>
+                        <td>Assinatura Individual (Arquivo)</td>
+                        <td>LEONARDO ALVES</td>
+                        <td>26/02/2026 18:11:42<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
+                        <td>Documento alterado após assinatura</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>ASSINA</td>
+                        <td>Assinatura por Certificado</td>
+                        <td>GRUPO AUDITORIA G1</td>
+                        <td>26/02/2026 18:14:05<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
+                        <td>Integridade confirmada</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="dialog-footer">
+            <a href="#" class="button greenB">Visualizar Relatório de Conformidade</a>
+        </div>
+        
+    </div>
+</div>
+
+</body>
+</html>
