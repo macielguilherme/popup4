@@ -152,10 +152,10 @@
         }
         .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; color: #fff; }
         .blueB {
-    background-position: 0 -397px;
-    border: 1px solid #93682b;
-    color: #fff;
-}
+            background-position: 0 -397px;
+            border: 1px solid #93682b;
+            color: #fff;
+        }
         .button:active { opacity: 0.8; }
         .button:disabled {
             opacity: 0.6;
@@ -176,20 +176,21 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Mensagem de sucesso após validação */
+        /* Mensagem de sucesso após validação - sem emojis */
         .validation-message {
-    background: #e8f5e9;
-    border: 1px solid #4caf50;
-    padding: 8px 12px;
-    margin-top: 15px;
-    font-size: 12px;
-    color: #2e7d32;
-    border-radius: 3px;
-    display: none;
-    align-items: center;
-    gap: 8px;
-    text-align: left;
-}
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            padding: 8px 12px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: #2e7d32;
+            border-radius: 3px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+        }
         .validation-message.show {
             display: flex;
         }
@@ -253,12 +254,18 @@
         .cert-item { padding: 6px 0; border-bottom: 1px dashed #ddd; }
         .cert-item:last-child { border-bottom: none; }
 
-        /* pequeno ajuste */
-        .btn-wrapper {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            align-items: center;
+        /* Status styles without emojis */
+        .status-valid {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .status-invalid {
+            color: #c62828;
+            font-weight: bold;
+        }
+        .status-pending {
+            color: #f57c00;
+            font-style: italic;
         }
     </style>
 </head>
@@ -282,22 +289,28 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td><td>ASSINA</td><td>Assinatura Individual (Arquivo)</td><td>NATHÁLIA NOVAIS MATTOS</td>
+                        <td>1</td>
+                        <td>ASSINA</td>
+                        <td>Assinatura Individual (Arquivo)</td>
+                        <td>NATHÁLIA NOVAIS MATTOS</td>
                         <td>26/02/2026 18:09:17<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
-                        <td id="validStatus1">Aguardando validação</td>
+                        <td id="validStatus1" class="status-pending">Aguardando validação</td>
                     </tr>
                     <tr>
-                        <td>2</td><td>CHANCELA</td><td>Assinatura Individual (Arquivo)</td><td>LEONARDO ALVES</td>
+                        <td>2</td>
+                        <td>CHANCELA</td>
+                        <td>Assinatura Individual (Arquivo)</td>
+                        <td>LEONARDO ALVES</td>
                         <td>26/02/2026 18:11:42<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
-                        <td id="validStatus2">Aguardando validação</td>
+                        <td id="validStatus2" class="status-pending">Aguardando validação</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Mensagem que aparece após validação -->
+        <!-- Mensagem que aparece após validação - TEXTO EXATO SEM EMOJIS -->
         <div id="validationSuccessMsg" class="validation-message">
-            As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
+            <span></span> Sucesso: As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
         </div>
 
         <div class="dialog-footer">
@@ -404,9 +417,6 @@
 </div>
 
 <script>
-    // Estado para controlar se já foi validado alguma vez (para manter botão relatório ativo)
-    let isValidated = false;
-
     // Função que simula a validação das assinaturas com delay e spinner
     function validarAssinaturas() {
         const btn = document.getElementById('btnValidarAssinaturas');
@@ -427,24 +437,22 @@
 
         // Simula o processamento de validação (2 segundos)
         setTimeout(() => {
-            // Atualiza as informações com base nos dados originais:
-            // Assinatura 1: era "Certificado válido" no modelo original? No HTML original a primeira tinha "Certificado válido"
-            // mas a segunda tinha "Documento alterado após assinatura". Vamos manter coerência com o que o validador retornaria.
-            // Após a validação completa, exibimos os status definitivos.
-            // Conforme o contexto: a primeira assinatura (NATHÁLIA) é válida; a segunda (LEONARDO) teve problema de alteração posterior.
-            validStatus1.innerHTML = '<span style="color: #2e7d32;">Certificado válido</span><br><span style="font-size:10px;">(Validação concluída)</span>';
-            validStatus2.innerHTML = '<span style="color: #c62828;">Documento alterado após assinatura</span><br><span style="font-size:10px;">(Validação concluída)</span>';
+            // Atualiza status na tabela principal - sem emojis
+            validStatus1.innerHTML = '<span class="status-valid">Certificado válido</span><br><span style="font-size:10px;">(Validação concluída)</span>';
+            validStatus2.innerHTML = '<span class="status-invalid">Documento alterado após assinatura</span><br><span style="font-size:10px;">(Validação concluída)</span>';
+            validStatus1.classList.remove('status-pending');
+            validStatus2.classList.remove('status-pending');
             
             // Atualiza status detalhado nas abas para refletir validação real
-            detailStatus1.innerHTML = 'Válida (certificado íntegro)';
-            detailStatus2.innerHTML = 'Inválida - Conteúdo modificado pós-assinatura';
+            detailStatus1.innerHTML = '<span class="status-valid">Válida (certificado íntegro)</span>';
+            detailStatus2.innerHTML = '<span class="status-invalid">Inválida - Conteúdo modificado pós-assinatura</span>';
             
             // Atualiza data/hora atual da validação
             const now = new Date();
             const formattedDate = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
             validationDateSpan.innerText = formattedDate + ' BRT';
             
-            // Mostra mensagem de sucesso
+            // Mostra mensagem de sucesso com o texto exato solicitado (sem emojis)
             validationMsg.classList.add('show');
             
             // Exibe o botão de relatório de conformidade (que antes estava oculto)
@@ -455,25 +463,19 @@
             btnText.style.opacity = '1';
             btnSpinner.style.display = 'none';
             
-            // Marca que a validação foi realizada ao menos uma vez (para manter o botão relatório visível)
-            isValidated = true;
-            
-            // Se o relatório já estiver aberto, força a atualização visual das abas já está ok.
-            // Caso o usuário clique novamente no validar, ele poderá reexecutar e atualizar os status (simulando revalidação)
-            // Isso atende ao requisito: "Esse botão de validar deve permanecer ativo depois para se validar novamente ou quantas vezes o usuário desejar."
-        }, 2000); // 2 segundos simulando o processamento da validação
+            // Rolagem suave até a mensagem
+            validationMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 2000);
     }
 
-    // Função para alternar a visibilidade do relatório (agora controlada pelo botão que só aparece após validação)
+    // Função para alternar a visibilidade do relatório
     function toggleRelatorio() {
         const relatorio = document.getElementById("relatorioContainer");
         const btnRelatorio = document.getElementById("btnRelatorio");
         
         if (relatorio.style.display === "none" || relatorio.style.display === "") {
             relatorio.style.display = "block";
-            // Rolagem suave para o container de abas
             relatorio.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Opcional: alterar texto do botão para "Ocultar Relatório" caso queira, mas mantemos o padrão.
             btnRelatorio.innerText = "Ocultar Relatório de Conformidade";
         } else {
             relatorio.style.display = "none";
@@ -481,7 +483,7 @@
         }
     }
 
-    // Função de abas (preservando o funcionamento original)
+    // Função de abas
     function openTab(evt, tabName) {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
@@ -500,26 +502,17 @@
         }
         if (evt && evt.currentTarget) {
             evt.currentTarget.classList.add("active");
-        } else {
-            // fallback: procura o botão correspondente
-            const targetBtn = Array.from(tablinks).find(btn => btn.innerText.toLowerCase().includes(tabName.toLowerCase()) || 
-                (tabName === 'tabGeral' && btn.innerText === 'Visão Geral') ||
-                (tabName === 'tabAss1' && btn.innerText.includes('Assinatura 1')) ||
-                (tabName === 'tabAss2' && btn.innerText.includes('Assinatura 2')));
-            if(targetBtn) targetBtn.classList.add("active");
         }
     }
 
-    // Função para fechar o modal (simulação, apenas para efeito de comportamento)
+    // Função para fechar o modal
     function closeModal() {
-        alert("Funcionalidade de fechar (apenas demonstração). Em sistema real, o modal seria removido.");
-        // Para UX, podemos simplesmente esconder o modal (simulação)
         const modal = document.querySelector('.ui-dialog');
         if(modal) modal.style.display = 'none';
-        // Ou apenas exibir mensagem: "Em produção, fecharia o modal"
+        alert("Modal fechado.");
     }
 
-    // Inicialização: garantir que o relatório esteja oculto, botão de relatório oculto, mensagem de validação oculta.
+    // Inicialização
     window.onload = function() {
         const relatorio = document.getElementById("relatorioContainer");
         const btnRelatorio = document.getElementById("btnRelatorio");
@@ -529,15 +522,19 @@
         btnRelatorio.style.display = "none";
         validationMsg.classList.remove("show");
         
-        // Estado inicial da tabela de validação: "Aguardando validação"
-        document.getElementById("validStatus1").innerHTML = '<span style="color:#f57c00;">Aguardando validação</span>';
-        document.getElementById("validStatus2").innerHTML = '<span style="color:#f57c00;">Aguardando validação</span>';
+        // Estado inicial da tabela de validação - sem emojis
+        const status1 = document.getElementById("validStatus1");
+        const status2 = document.getElementById("validStatus2");
+        status1.innerHTML = '<span class="status-pending">Aguardando validação</span>';
+        status2.innerHTML = '<span class="status-pending">Aguardando validação</span>';
+        status1.classList.add('status-pending');
+        status2.classList.add('status-pending');
         
         // status detalhados nas abas enquanto não validado
         const detail1 = document.getElementById("detailStatus1");
         const detail2 = document.getElementById("detailStatus2");
-        if(detail1) detail1.innerHTML = 'Indeterminada (validação pendente)';
-        if(detail2) detail2.innerHTML = 'Indeterminada (validação pendente)';
+        if(detail1) detail1.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
+        if(detail2) detail2.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
         
         // Data de validação inicial padrão
         const validationDateSpan = document.getElementById("validationDate");
@@ -550,36 +547,7 @@
         if(btn) btn.disabled = false;
         if(btnSpinner) btnSpinner.style.display = 'none';
         if(btnText) btnText.style.opacity = '1';
-        
-        // Ao clicar novamente no botão de validar, se o relatório estiver visível e a pessoa revalidar,
-        // os status na tabela e abas serão atualizados. O botão "Visualizar Relatório" permanece visível após a primeira validação
-        // e o conteúdo do relatório (status) é atualizado dinamicamente.
     };
-    
-    // Sobrescrita para que quando o usuário validar novamente, também atualizemos corretamente,
-    // mantendo o botão de relatório visível, e resetando mensagens anteriores conforme novo processamento.
-    // O método validarAssinaturas já faz todo o trabalho. Vamos ajustar para garantir que se o usuário revalidar,
-    // o relatório não seja automaticamente ocultado, mas os dados dentro dele (status das abas, etc) sejam atualizados.
-    // Além disso, manter a mensagem de "assinaturas validadas" reaparece a cada validação (feedback positivo)
-    // e o botão de relatório continua visível.
-    // Importante: Atualizamos também os status na tabela principal e nas abas. Tudo isso já está na função validarAssinaturas.
-    // Só é necessário garantir que o container do relatório, se já estiver aberto, exiba os novos dados sem fechar.
-    // Isso já está OK porque a função altera os elementos de status que estão dentro do relatório também.
-    
-    // Aperfeiçoamento: ao revalidar, mesmo que o relatório esteja aberto, os textos atualizam e o usuário vê as mudanças.
-    // Opcional: exibir novamente a mensagem "As assinaturas foram devidamente validadas" a cada nova validação.
-    // O método já adiciona a classe .show na mensagem, mas caso já esteja visível, mantém.
-    // Além disso, garantimos que o botão "Visualizar Relatório" não suma nas revalidações.
-    // Adicionar uma pequena melhoria: Se o usuário validar novamente, o spinner aparece e a mensagem de sucesso some e depois reaparece.
-    // Já está implementado. Tudo funcionando.
-    
-    // Finalmente, assegurar que a primeira validação exibe o botão de relatório, e depois revalidações mantêm.
-    // E a ação "Visualizar Relatório de Conformidade" fica oculta até que o usuário tenha clicado em validar ao menos uma vez.
-    // Se o usuário revalidar 5 vezes, o botão fica lá, como pedido.
-    // O requisito "O botão Ver Relatório de Conformidade fica oculto, até que seja feita a validação" está completamente atendido.
-    
-    // Caso o usuário queira revalidar após ter feito e o relatório estiver visível, tudo segue padrão.
-    console.log("Pronto: sistema de validação com spinner e botão de relatório condicional implementado.");
 </script>
 </body>
 </html>
