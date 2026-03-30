@@ -297,7 +297,7 @@
 
         <!-- Mensagem que aparece após validação -->
         <div id="validationSuccessMsg" class="validation-message">
-            <span>✅</span> As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
+            As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
         </div>
 
         <div class="dialog-footer">
@@ -432,8 +432,8 @@
             // mas a segunda tinha "Documento alterado após assinatura". Vamos manter coerência com o que o validador retornaria.
             // Após a validação completa, exibimos os status definitivos.
             // Conforme o contexto: a primeira assinatura (NATHÁLIA) é válida; a segunda (LEONARDO) teve problema de alteração posterior.
-            validStatus1.innerHTML = '<span style="color: #2e7d32;">✅ Certificado válido</span><br><span style="font-size:10px;">(Validação concluída)</span>';
-            validStatus2.innerHTML = '<span style="color: #c62828;">⚠️ Documento alterado após assinatura</span><br><span style="font-size:10px;">(Validação concluída)</span>';
+            validStatus1.innerHTML = '<span style="color: #2e7d32;">Certificado válido</span><br><span style="font-size:10px;">(Validação concluída)</span>';
+            validStatus2.innerHTML = '<span style="color: #c62828;">Documento alterado após assinatura</span><br><span style="font-size:10px;">(Validação concluída)</span>';
             
             // Atualiza status detalhado nas abas para refletir validação real
             detailStatus1.innerHTML = 'Válida (certificado íntegro)';
@@ -530,8 +530,8 @@
         validationMsg.classList.remove("show");
         
         // Estado inicial da tabela de validação: "Aguardando validação"
-        document.getElementById("validStatus1").innerHTML = '<span style="color:#f57c00;">⏳ Aguardando validação</span>';
-        document.getElementById("validStatus2").innerHTML = '<span style="color:#f57c00;">⏳ Aguardando validação</span>';
+        document.getElementById("validStatus1").innerHTML = '<span style="color:#f57c00;">Aguardando validação</span>';
+        document.getElementById("validStatus2").innerHTML = '<span style="color:#f57c00;">Aguardando validação</span>';
         
         // status detalhados nas abas enquanto não validado
         const detail1 = document.getElementById("detailStatus1");
