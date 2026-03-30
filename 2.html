@@ -152,7 +152,7 @@
         }
         .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; color: #fff; }
         .blueB {
-            background-position: 0 -397px;
+            background-position: 0 -395px;
             border: 1px solid #93682b;
             color: #fff;
         }
@@ -176,7 +176,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Mensagem de sucesso após validação - sem emojis */
+        /* Mensagem de sucesso após validação */
         .validation-message {
             background: #e8f5e9;
             border: 1px solid #4caf50;
@@ -254,13 +254,17 @@
         .cert-item { padding: 6px 0; border-bottom: 1px dashed #ddd; }
         .cert-item:last-child { border-bottom: none; }
 
-        /* Status styles without emojis */
+        /* Status styles */
         .status-valid {
             color: #2e7d32;
             font-weight: bold;
         }
         .status-invalid {
             color: #c62828;
+            font-weight: bold;
+        }
+        .status-indeterminate {
+            color: #f57c00;
             font-weight: bold;
         }
         .status-pending {
@@ -283,8 +287,12 @@
             <table class="sTable">
                 <thead>
                     <tr>
-                        <th width="5%">N°</th><th width="15%">Ação</th><th width="20%">Tipo de Assinatura</th>
-                        <th width="20%">Usuário</th><th width="15%">Data</th><th width="25%">Validação da Assinatura</th>
+                        <th width="5%">N°</th>
+                        <th width="15%">Ação</th>
+                        <th width="20%">Tipo de Assinatura</th>
+                        <th width="20%">Usuário</th>
+                        <th width="15%">Data</th>
+                        <th width="25%">Validação da Assinatura</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -304,30 +312,37 @@
                         <td>26/02/2026 18:11:42<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
                         <td id="validStatus2" class="status-pending">Aguardando validação</td>
                     </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>ASSINA</td>
+                        <td>Assinatura Digital (Certificado A3)</td>
+                        <td>MARIANA COSTA SANTOS</td>
+                        <td>27/02/2026 09:34:21<br><span style="color: #888; font-size: 10px;">(UTC-03:00)</span></td>
+                        <td id="validStatus3" class="status-pending">Aguardando validação</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Mensagem que aparece após validação - TEXTO EXATO SEM EMOJIS -->
+        <!-- Mensagem que aparece após validação -->
         <div id="validationSuccessMsg" class="validation-message">
-            <span></span> Sucesso: As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
+            Sucesso: As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
         </div>
 
         <div class="dialog-footer">
-            <!-- Botão Validar Assinaturas (sempre visível, com spinner durante validação) -->
             <button id="btnValidarAssinaturas" class="button blueB" onclick="validarAssinaturas()">
                 <span id="btnText">Validar Assinaturas</span>
                 <span id="btnSpinner" style="display: none;" class="spinner"></span>
             </button>
-            <!-- Botão Visualizar Relatório (oculto inicialmente, só aparece após validação) -->
             <button id="btnRelatorio" class="button greenB" style="display: none;" onclick="toggleRelatorio()">Visualizar Relatório de Conformidade</button>
         </div>
 
         <div id="relatorioContainer">
             <div class="tabs-header">
                 <button class="tab-btn active" onclick="openTab(event, 'tabGeral')">Visão Geral</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabAss1')">Assinatura 1 (26/02/2026)</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabAss2')">Assinatura 2 (26/02/2026)</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss1')">Assinatura 1 (Nathália)</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss2')">Assinatura 2 (Leonardo)</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss3')">Assinatura 3 (Mariana)</button>
             </div>
 
             <div id="tabGeral" class="tab-content active">
@@ -340,9 +355,9 @@
                 </div>
                 <div class="info-title">Informações do Arquivo</div>
                 <div class="info-block">
-                    <strong>Nome do arquivo:</strong> f3fa13ce-0d43-46f5-b064-beb47bdb5be4.pdf<br>
+                    <strong>Nome do arquivo:</strong> DC00146G20052979SOS_2_NORMAL.pdf<br>
                     <strong>Resumo SHA256:</strong> 737836f5a5e9295f844a7161e5c5d2e589f8debe75b32eaa05cf8232c4668746<br>
-                    <strong>Tipo:</strong> PDF | <strong>Assinaturas:</strong> 2 (2 ancoradas)
+                    <strong>Tipo:</strong> PDF | <strong>Assinaturas:</strong> 3 (3 ancoradas)
                 </div>
                 <div class="info-title">Políticas e Listas</div>
                 <div class="info-block">
@@ -353,17 +368,16 @@
 
             <div id="tabAss1" class="tab-content">
                 <div class="info-block">
-                    <strong>Assinante:</strong> CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, L=Brasilia, ST=DF, O=ICP-Brasil, C=BR<br>
-                    <strong>CNPJ:</strong> 04.744.134/0001-78 | <strong>CPF do Rep.:</strong> ***.663.981-**<br>
+                    <strong>Assinante:</strong> CN=NATHÁLIA NOVAIS MATTOS, OU=AC CERTIFICA ANAPOLIS v5, O=ICP-Brasil, C=BR<br>
+                    <strong>CPF:</strong> ***.663.981-**<br>
                     <strong>Data assinatura:</strong> 26/02/2026 18:09:17 BRT<br>
                     <strong>Tipo:</strong> Destacada | <strong>Status:</strong> <span id="detailStatus1">Indeterminada</span><br>
-                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada<br>
-                    <strong>Mensagem:</strong> Não foi possível identificar se existem modificações incrementais
+                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada
                 </div>
                 <details class="docz-collapse">
                     <summary>Certificados Utilizados</summary>
                     <div class="collapse-content">
-                        <div class="cert-item">CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, OU=AC CERTIFICA ANAPOLIS v5...</div>
+                        <div class="cert-item">CN=NATHÁLIA NOVAIS MATTOS, OU=AC CERTIFICA ANAPOLIS v5, O=ICP-Brasil, C=BR</div>
                         <div class="cert-item">CN=AC CERTIFICA ANAPOLIS v5, OU=AC SOLUTI v5, O=ICP-Brasil, C=BR</div>
                         <div class="cert-item">CN=AC SOLUTI v5, OU=Autoridade Certificadora Raiz Brasileira v5, O=ICP-Brasil, C=BR</div>
                         <div class="cert-item">CN=Autoridade Certificadora Raiz Brasileira v5, OU=ITI, O=ICP-Brasil, C=BR</div>
@@ -377,7 +391,7 @@
                     </div>
                 </details>
                 <details class="docz-collapse">
-                    <summary>Carimbo de Tempo (IdAaSignatureTimeStampToken)</summary>
+                    <summary>Carimbo de Tempo</summary>
                     <div class="collapse-content">
                         <strong>Assinante:</strong> CN=SERVIDOR DE CARIMBO DO TEMPO ACT BRy 50151, O=ICP-Brasil, C=BR<br>
                         <strong>Data do carimbo:</strong> 18/09/2025 20:23:31 BRT<br>
@@ -388,17 +402,16 @@
 
             <div id="tabAss2" class="tab-content">
                 <div class="info-block">
-                    <strong>Assinante:</strong> CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, L=Brasilia, ST=DF, O=ICP-Brasil, C=BR<br>
-                    <strong>CNPJ:</strong> 04.744.134/0001-78 | <strong>CPF do Rep.:</strong> ***.663.981-**<br>
-                    <strong>Data assinatura:</strong> 26/02/2026 21:09:17 BRT<br>
+                    <strong>Assinante:</strong> CN=LEONARDO ALVES, OU=AC CERTIFICA ANAPOLIS v5, O=ICP-Brasil, C=BR<br>
+                    <strong>CPF:</strong> ***.123.456-**<br>
+                    <strong>Data assinatura:</strong> 26/02/2026 18:11:42 BRT<br>
                     <strong>Tipo:</strong> Destacada | <strong>Status:</strong> <span id="detailStatus2">Indeterminada</span><br>
-                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada<br>
-                    <strong>Mensagem:</strong> Não foi possível identificar se existem modificações incrementais
+                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada
                 </div>
                 <details class="docz-collapse">
                     <summary>Certificados Utilizados</summary>
                     <div class="collapse-content">
-                        <div class="cert-item">CN=SOS TECNOLOGIA E GESTAO DA INFORMACAO LTDA:04744134000178, OU=AC CERTIFICA ANAPOLIS v5...</div>
+                        <div class="cert-item">CN=LEONARDO ALVES, OU=AC CERTIFICA ANAPOLIS v5, O=ICP-Brasil, C=BR</div>
                         <div class="cert-item">CN=AC CERTIFICA ANAPOLIS v5, OU=AC SOLUTI v5, O=ICP-Brasil, C=BR</div>
                         <div class="cert-item">CN=AC SOLUTI v5, OU=Autoridade Certificadora Raiz Brasileira v5, O=ICP-Brasil, C=BR</div>
                         <div class="cert-item">CN=Autoridade Certificadora Raiz Brasileira v5, OU=ITI, O=ICP-Brasil, C=BR</div>
@@ -411,13 +424,53 @@
                         <strong>Opcionais:</strong> Não possui.
                     </div>
                 </details>
+                <details class="docz-collapse">
+                    <summary>Análise de Integridade</summary>
+                    <div class="collapse-content">
+                        <strong>Mensagem:</strong> Foi detectada alteração no conteúdo do documento após a aplicação desta assinatura.<br>
+                        <strong>Recomendação:</strong> Verificar versões anteriores do documento.
+                    </div>
+                </details>
+            </div>
+
+            <div id="tabAss3" class="tab-content">
+                <div class="info-block">
+                    <strong>Assinante:</strong> CN=MARIANA COSTA SANTOS, OU=AC CERTIFICA BRASIL v4, O=ICP-Brasil, C=BR<br>
+                    <strong>CPF:</strong> ***.987.654-**<br>
+                    <strong>Data assinatura:</strong> 27/02/2026 09:34:21 BRT<br>
+                    <strong>Tipo:</strong> Assinatura Digital A3 | <strong>Status:</strong> <span id="detailStatus3">Indeterminada</span><br>
+                    <strong>Caminho cert.:</strong> Valid | <strong>Estrutura:</strong> Em conformidade | <strong>Cifra:</strong> Aprovada
+                </div>
+                <details class="docz-collapse">
+                    <summary>Certificados Utilizados</summary>
+                    <div class="collapse-content">
+                        <div class="cert-item">CN=MARIANA COSTA SANTOS, OU=AC CERTIFICA BRASIL v4, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=AC CERTIFICA BRASIL v4, OU=AC SOLUTI v5, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=AC SOLUTI v5, OU=Autoridade Certificadora Raiz Brasileira v5, O=ICP-Brasil, C=BR</div>
+                        <div class="cert-item">CN=Autoridade Certificadora Raiz Brasileira v5, OU=ITI, O=ICP-Brasil, C=BR</div>
+                    </div>
+                </details>
+                <details class="docz-collapse">
+                    <summary>Atributos Usados</summary>
+                    <div class="collapse-content">
+                        <strong>Obrigatórios:</strong> IdMessageDigest (Valid), IdContentType (Valid), IdAaEtsSigPolicyId (Valid), IdAaSigningCertificateV2 (Valid), SignatureDictionary (Valid)<br>
+                        <strong>Opcionais:</strong> IdAaSignatureTimeStampToken (Valid), IdAaCommitmentType (Valid)
+                    </div>
+                </details>
+                <details class="docz-collapse">
+                    <summary>Carimbo de Tempo</summary>
+                    <div class="collapse-content">
+                        <strong>Assinante:</strong> CN=SERVIDOR DE CARIMBO DO TEMPO ACT BRy 50151, O=ICP-Brasil, C=BR<br>
+                        <strong>Data do carimbo:</strong> 27/02/2026 09:34:22 BRT<br>
+                        <strong>Estrutura:</strong> Em conformidade | <strong>Status:</strong> Aprovado
+                    </div>
+                </details>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Função que simula a validação das assinaturas com delay e spinner
     function validarAssinaturas() {
         const btn = document.getElementById('btnValidarAssinaturas');
         const btnText = document.getElementById('btnText');
@@ -426,49 +479,50 @@
         const validationMsg = document.getElementById('validationSuccessMsg');
         const validStatus1 = document.getElementById('validStatus1');
         const validStatus2 = document.getElementById('validStatus2');
+        const validStatus3 = document.getElementById('validStatus3');
         const detailStatus1 = document.getElementById('detailStatus1');
         const detailStatus2 = document.getElementById('detailStatus2');
+        const detailStatus3 = document.getElementById('detailStatus3');
         const validationDateSpan = document.getElementById('validationDate');
 
-        // Desabilita o botão durante a validação e mostra spinner
         btn.disabled = true;
         btnText.style.opacity = '0.7';
         btnSpinner.style.display = 'inline-block';
 
-        // Simula o processamento de validação (2 segundos)
         setTimeout(() => {
-            // Atualiza status na tabela principal - sem emojis
-            validStatus1.innerHTML = '<span class="status-valid">Certificado válido</span><br><span style="font-size:10px;">(Validação concluída)</span>';
-            validStatus2.innerHTML = '<span class="status-invalid">Documento alterado após assinatura</span><br><span style="font-size:10px;">(Validação concluída)</span>';
+            // Status simplificados: Válida, Inválida, Indeterminada
+            // Assinatura 1: Válida
+            validStatus1.innerHTML = '<span class="status-valid">Válida</span>';
             validStatus1.classList.remove('status-pending');
+            
+            // Assinatura 2: Inválida
+            validStatus2.innerHTML = '<span class="status-invalid">Inválida</span>';
             validStatus2.classList.remove('status-pending');
             
-            // Atualiza status detalhado nas abas para refletir validação real
-            detailStatus1.innerHTML = '<span class="status-valid">Válida (certificado íntegro)</span>';
-            detailStatus2.innerHTML = '<span class="status-invalid">Inválida - Conteúdo modificado pós-assinatura</span>';
+            // Assinatura 3: Indeterminada
+            validStatus3.innerHTML = '<span class="status-indeterminate">Indeterminada</span>';
+            validStatus3.classList.remove('status-pending');
             
-            // Atualiza data/hora atual da validação
+            // Atualiza status detalhado nas abas
+            detailStatus1.innerHTML = '<span class="status-valid">Válida</span>';
+            detailStatus2.innerHTML = '<span class="status-invalid">Inválida</span>';
+            detailStatus3.innerHTML = '<span class="status-indeterminate">Indeterminada</span>';
+            
             const now = new Date();
             const formattedDate = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
             validationDateSpan.innerText = formattedDate + ' BRT';
             
-            // Mostra mensagem de sucesso com o texto exato solicitado (sem emojis)
             validationMsg.classList.add('show');
-            
-            // Exibe o botão de relatório de conformidade (que antes estava oculto)
             btnRelatorio.style.display = 'inline-flex';
             
-            // Habilita o botão de validar novamente (mantém ativo para novas validações)
             btn.disabled = false;
             btnText.style.opacity = '1';
             btnSpinner.style.display = 'none';
             
-            // Rolagem suave até a mensagem
             validationMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 2000);
     }
 
-    // Função para alternar a visibilidade do relatório
     function toggleRelatorio() {
         const relatorio = document.getElementById("relatorioContainer");
         const btnRelatorio = document.getElementById("btnRelatorio");
@@ -483,7 +537,6 @@
         }
     }
 
-    // Função de abas
     function openTab(evt, tabName) {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
@@ -505,14 +558,12 @@
         }
     }
 
-    // Função para fechar o modal
     function closeModal() {
         const modal = document.querySelector('.ui-dialog');
         if(modal) modal.style.display = 'none';
         alert("Modal fechado.");
     }
 
-    // Inicialização
     window.onload = function() {
         const relatorio = document.getElementById("relatorioContainer");
         const btnRelatorio = document.getElementById("btnRelatorio");
@@ -522,25 +573,25 @@
         btnRelatorio.style.display = "none";
         validationMsg.classList.remove("show");
         
-        // Estado inicial da tabela de validação - sem emojis
         const status1 = document.getElementById("validStatus1");
         const status2 = document.getElementById("validStatus2");
+        const status3 = document.getElementById("validStatus3");
+        
         status1.innerHTML = '<span class="status-pending">Aguardando validação</span>';
         status2.innerHTML = '<span class="status-pending">Aguardando validação</span>';
-        status1.classList.add('status-pending');
-        status2.classList.add('status-pending');
+        status3.innerHTML = '<span class="status-pending">Aguardando validação</span>';
         
-        // status detalhados nas abas enquanto não validado
         const detail1 = document.getElementById("detailStatus1");
         const detail2 = document.getElementById("detailStatus2");
+        const detail3 = document.getElementById("detailStatus3");
+        
         if(detail1) detail1.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
         if(detail2) detail2.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
+        if(detail3) detail3.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
         
-        // Data de validação inicial padrão
         const validationDateSpan = document.getElementById("validationDate");
         validationDateSpan.innerText = '--/--/---- --:--:--';
         
-        // Garantir que o botão de validar esteja sempre ativo e sem spinner inicial
         const btn = document.getElementById('btnValidarAssinaturas');
         const btnSpinner = document.getElementById('btnSpinner');
         const btnText = document.getElementById('btnText');
