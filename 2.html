@@ -156,6 +156,11 @@
             border: 1px solid #93682b;
             color: #fff;
         }
+        .grayB {
+            background-position: 0 -365px;
+            border: 1px solid #888888;
+            color: #fff;
+        }
         .button:active { opacity: 0.8; }
         .button:disabled {
             opacity: 0.6;
@@ -279,57 +284,55 @@
             font-style: italic;
         }
 
-        /* Botões de exemplo fora do modal */
-        .demo-buttons {
+        /* Barra de ferramentas inferior - estilo sistema */
+        .toolbar-bottom {
             position: fixed;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
             display: flex;
-            gap: 15px;
-            background: rgba(0,0,0,0.75);
-            padding: 10px 20px;
-            border-radius: 40px;
-            backdrop-filter: blur(8px);
+            justify-content: center;
+            gap: 12px;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .demo-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            font-size: 12px;
+        .toolbar-btn {
+            font-size: 10px;
             font-weight: bold;
+            text-transform: uppercase;
+            white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s;
             font-family: Arial, Helvetica, sans-serif;
+            line-height: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 7px 15px;
+            box-sizing: border-box;
+            background-image: url('https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png');
+            background-repeat: repeat-x;
+            border-radius: 2px;
+            transition: opacity 0.2s;
+            border: 1px solid #7ca82a;
+            color: #fff;
         }
-        .demo-btn.success {
-            background: #2e7d32;
-            color: white;
-            border: 1px solid #1b5e20;
+        .toolbar-btn-green {
+            background-position: 0 -425px;
+            border-color: #7ca82a;
         }
-        .demo-btn.success:hover {
-            background: #1b5e20;
-            transform: scale(1.02);
+        .toolbar-btn-orange {
+            background-position: 0 -170px;
+            border-color: #93682b;
         }
-        .demo-btn.warning {
-            background: #f57c00;
-            color: white;
-            border: 1px solid #e65100;
+        .toolbar-btn-gray {
+            background-position: 0 -256px;
+            border-color: #888888;
         }
-        .demo-btn.warning:hover {
-            background: #e65100;
-            transform: scale(1.02);
+        .toolbar-btn:hover {
+            opacity: 0.9;
         }
-        .demo-btn.info {
-            background: #2b6893;
-            color: white;
-            border: 1px solid #1a4c6e;
-        }
-        .demo-btn.info:hover {
-            background: #1a4c6e;
-            transform: scale(1.02);
+        .toolbar-btn:active {
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -458,7 +461,6 @@
                         <strong>Estrutura:</strong> Em conformidade | <strong>Status atributos:</strong> Aprovados
                     </div>
                 </details>
-                <!-- Aba Análise de Integridade para status Indeterminada -->
                 <details class="docz-collapse" id="analysisCollapse1" style="display: none;">
                     <summary>Análise de Integridade</summary>
                     <div class="collapse-content">
@@ -533,7 +535,6 @@
                         <strong>Estrutura:</strong> Em conformidade | <strong>Status:</strong> Aprovado
                     </div>
                 </details>
-                <!-- Aba Análise de Integridade para status Indeterminada -->
                 <details class="docz-collapse" id="analysisCollapse3" style="display: none;">
                     <summary>Análise de Integridade</summary>
                     <div class="collapse-content">
@@ -546,11 +547,11 @@
     </div>
 </div>
 
-<!-- Botões de exemplo fora da popup -->
-<div class="demo-buttons">
-    <button class="demo-btn success" onclick="runScenario('allValid')">✅ Exemplo: Todas Válidas</button>
-    <button class="demo-btn warning" onclick="runScenario('withNonConformity')">⚠️ Exemplo: Com Não Conformidades</button>
-    <button class="demo-btn info" onclick="resetUI()">⟳ Resetar Interface</button>
+<!-- Barra de ferramentas inferior - estilo sistema -->
+<div class="toolbar-bottom">
+    <button class="toolbar-btn toolbar-btn-green" onclick="runScenario('allValid')">Todas Válidas</button>
+    <button class="toolbar-btn toolbar-btn-orange" onclick="runScenario('withNonConformity')">Com Não Conformidades</button>
+    <button class="toolbar-btn toolbar-btn-gray" onclick="resetUI()">Resetar Interface</button>
 </div>
 
 <script>
@@ -668,7 +669,7 @@
     
     // Função de validação padrão (quando clica no botão azul)
     function validarAssinaturas() {
-        // Por padrão, usamos o cenário com não conformidades (para demonstrar a mensagem de alerta)
+        // Por padrão, usamos o cenário com não conformidades
         runScenario('withNonConformity');
     }
     
