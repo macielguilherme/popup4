@@ -176,15 +176,12 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Mensagem de sucesso após validação */
+        /* Mensagens de validação */
         .validation-message {
-            background: #e8f5e9;
-            border: 1px solid #4caf50;
             padding: 8px 12px;
             margin-top: 15px;
             margin-bottom: 10px;
             font-size: 12px;
-            color: #2e7d32;
             border-radius: 3px;
             display: none;
             align-items: center;
@@ -193,6 +190,16 @@
         }
         .validation-message.show {
             display: flex;
+        }
+        .validation-message.success {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+        }
+        .validation-message.warning {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            color: #e65100;
         }
 
         /* --- SISTEMA DE ABAS E COLAPSES --- */
@@ -271,6 +278,59 @@
             color: #f57c00;
             font-style: italic;
         }
+
+        /* Botões de exemplo fora do modal */
+        .demo-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0,0,0,0.75);
+            padding: 10px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .demo-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .demo-btn.success {
+            background: #2e7d32;
+            color: white;
+            border: 1px solid #1b5e20;
+        }
+        .demo-btn.success:hover {
+            background: #1b5e20;
+            transform: scale(1.02);
+        }
+        .demo-btn.warning {
+            background: #f57c00;
+            color: white;
+            border: 1px solid #e65100;
+        }
+        .demo-btn.warning:hover {
+            background: #e65100;
+            transform: scale(1.02);
+        }
+        .demo-btn.info {
+            background: #2b6893;
+            color: white;
+            border: 1px solid #1a4c6e;
+        }
+        .demo-btn.info:hover {
+            background: #1a4c6e;
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body>
@@ -324,9 +384,9 @@
             </table>
         </div>
 
-        <!-- Mensagem que aparece após validação -->
-        <div id="validationSuccessMsg" class="validation-message">
-            Sucesso: As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.
+        <!-- Mensagem que aparece após validação (dinâmica) -->
+        <div id="validationMessageBox" class="validation-message">
+            <span id="validationMessageText"></span>
         </div>
 
         <div class="dialog-footer">
@@ -340,9 +400,9 @@
         <div id="relatorioContainer">
             <div class="tabs-header">
                 <button class="tab-btn active" onclick="openTab(event, 'tabGeral')">Visão Geral</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabAss1')">Assinatura 1 (Nathália)</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabAss2')">Assinatura 2 (Leonardo)</button>
-                <button class="tab-btn" onclick="openTab(event, 'tabAss3')">Assinatura 3 (Mariana)</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss1')">Assinatura 1</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss2')">Assinatura 2</button>
+                <button class="tab-btn" onclick="openTab(event, 'tabAss3')">Assinatura 3</button>
             </div>
 
             <div id="tabGeral" class="tab-content active">
@@ -396,6 +456,14 @@
                         <strong>Assinante:</strong> CN=SERVIDOR DE CARIMBO DO TEMPO ACT BRy 50151, O=ICP-Brasil, C=BR<br>
                         <strong>Data do carimbo:</strong> 18/09/2025 20:23:31 BRT<br>
                         <strong>Estrutura:</strong> Em conformidade | <strong>Status atributos:</strong> Aprovados
+                    </div>
+                </details>
+                <!-- Aba Análise de Integridade para status Indeterminada -->
+                <details class="docz-collapse" id="analysisCollapse1" style="display: none;">
+                    <summary>Análise de Integridade</summary>
+                    <div class="collapse-content">
+                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.<br>
+                        <strong>Recomendação:</strong> Verificar a integridade da cadeia de certificação e a presença dos atributos obrigatórios.
                     </div>
                 </details>
             </div>
@@ -465,18 +533,64 @@
                         <strong>Estrutura:</strong> Em conformidade | <strong>Status:</strong> Aprovado
                     </div>
                 </details>
+                <!-- Aba Análise de Integridade para status Indeterminada -->
+                <details class="docz-collapse" id="analysisCollapse3" style="display: none;">
+                    <summary>Análise de Integridade</summary>
+                    <div class="collapse-content">
+                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.<br>
+                        <strong>Recomendação:</strong> Verificar a integridade da cadeia de certificação e a presença dos atributos obrigatórios.
+                    </div>
+                </details>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Botões de exemplo fora da popup -->
+<div class="demo-buttons">
+    <button class="demo-btn success" onclick="runScenario('allValid')">✅ Exemplo: Todas Válidas</button>
+    <button class="demo-btn warning" onclick="runScenario('withNonConformity')">⚠️ Exemplo: Com Não Conformidades</button>
+    <button class="demo-btn info" onclick="resetUI()">⟳ Resetar Interface</button>
+</div>
+
 <script>
-    function validarAssinaturas() {
+    // Função para executar cenário específico
+    function runScenario(scenario) {
+        if (scenario === 'allValid') {
+            executarValidacaoComResultados([
+                { status: 'valid', text: 'Válida', class: 'status-valid' },
+                { status: 'valid', text: 'Válida', class: 'status-valid' },
+                { status: 'valid', text: 'Válida', class: 'status-valid' }
+            ], true);
+        } else {
+            executarValidacaoComResultados([
+                { status: 'valid', text: 'Válida', class: 'status-valid' },
+                { status: 'invalid', text: 'Inválida', class: 'status-invalid' },
+                { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' }
+            ], false);
+        }
+    }
+    
+    // Função para controlar exibição da aba de análise baseada no status
+    function toggleAnalysisTab(status, tabIndex) {
+        const analysisCollapse = document.getElementById(`analysisCollapse${tabIndex}`);
+        if (analysisCollapse) {
+            if (status === 'indeterminate') {
+                analysisCollapse.style.display = 'block';
+            } else {
+                analysisCollapse.style.display = 'none';
+            }
+        }
+    }
+    
+    // Função que executa a validação com resultados específicos
+    function executarValidacaoComResultados(results, allValid) {
         const btn = document.getElementById('btnValidarAssinaturas');
         const btnText = document.getElementById('btnText');
         const btnSpinner = document.getElementById('btnSpinner');
         const btnRelatorio = document.getElementById('btnRelatorio');
-        const validationMsg = document.getElementById('validationSuccessMsg');
+        const validationMsgBox = document.getElementById('validationMessageBox');
+        const validationMsgText = document.getElementById('validationMessageText');
         const validStatus1 = document.getElementById('validStatus1');
         const validStatus2 = document.getElementById('validStatus2');
         const validStatus3 = document.getElementById('validStatus3');
@@ -484,45 +598,125 @@
         const detailStatus2 = document.getElementById('detailStatus2');
         const detailStatus3 = document.getElementById('detailStatus3');
         const validationDateSpan = document.getElementById('validationDate');
-
+        
+        // Desabilitar botão durante validação
         btn.disabled = true;
         btnText.style.opacity = '0.7';
         btnSpinner.style.display = 'inline-block';
-
+        
+        // Simular tempo de processamento
         setTimeout(() => {
-            // Status simplificados: Válida, Inválida, Indeterminada
-            // Assinatura 1: Válida
-            validStatus1.innerHTML = '<span class="status-valid">Válida</span>';
-            validStatus1.classList.remove('status-pending');
+            // Aplicar status na tabela
+            const statusIds = [validStatus1, validStatus2, validStatus3];
+            results.forEach((result, idx) => {
+                if (statusIds[idx]) {
+                    statusIds[idx].innerHTML = `<span class="${result.class}">${result.text}</span>`;
+                }
+            });
             
-            // Assinatura 2: Inválida
-            validStatus2.innerHTML = '<span class="status-invalid">Inválida</span>';
-            validStatus2.classList.remove('status-pending');
+            // Atualizar status detalhado nas abas e controlar aba de análise
+            const detailStatusMap = [detailStatus1, detailStatus2, detailStatus3];
+            results.forEach((result, idx) => {
+                if (detailStatusMap[idx]) {
+                    let displayText = '';
+                    let cssClass = '';
+                    if (result.status === 'valid') {
+                        displayText = 'Válida';
+                        cssClass = 'status-valid';
+                    } else if (result.status === 'invalid') {
+                        displayText = 'Inválida';
+                        cssClass = 'status-invalid';
+                    } else {
+                        displayText = 'Indeterminada';
+                        cssClass = 'status-indeterminate';
+                    }
+                    detailStatusMap[idx].innerHTML = `<span class="${cssClass}">${displayText}</span>`;
+                }
+                // Controlar exibição da aba de análise (índice +1 porque as abas são 1,2,3)
+                toggleAnalysisTab(result.status, idx + 1);
+            });
             
-            // Assinatura 3: Indeterminada
-            validStatus3.innerHTML = '<span class="status-indeterminate">Indeterminada</span>';
-            validStatus3.classList.remove('status-pending');
-            
-            // Atualiza status detalhado nas abas
-            detailStatus1.innerHTML = '<span class="status-valid">Válida</span>';
-            detailStatus2.innerHTML = '<span class="status-invalid">Inválida</span>';
-            detailStatus3.innerHTML = '<span class="status-indeterminate">Indeterminada</span>';
-            
+            // Data de validação
             const now = new Date();
             const formattedDate = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
             validationDateSpan.innerText = formattedDate + ' BRT';
             
-            validationMsg.classList.add('show');
+            // Exibir mensagem apropriada
+            validationMsgBox.classList.remove('success', 'warning');
+            
+            if (allValid) {
+                validationMsgText.innerHTML = 'Sucesso: As assinaturas foram devidamente validadas. Clique no botão abaixo para ver os detalhes de Conformidade.';
+                validationMsgBox.classList.add('success');
+            } else {
+                validationMsgText.innerHTML = 'Validação Concluída com não conformidades, verifique o Relatório de Conformidade';
+                validationMsgBox.classList.add('warning');
+            }
+            validationMsgBox.classList.add('show');
+            
+            // Mostrar botão de relatório
             btnRelatorio.style.display = 'inline-flex';
             
+            // Reativar botão
             btn.disabled = false;
             btnText.style.opacity = '1';
             btnSpinner.style.display = 'none';
             
-            validationMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 2000);
+            // Rolar até a mensagem
+            validationMsgBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 1500);
     }
-
+    
+    // Função de validação padrão (quando clica no botão azul)
+    function validarAssinaturas() {
+        // Por padrão, usamos o cenário com não conformidades (para demonstrar a mensagem de alerta)
+        runScenario('withNonConformity');
+    }
+    
+    // Reset da interface para estado inicial
+    function resetUI() {
+        const btnRelatorio = document.getElementById('btnRelatorio');
+        const relatorio = document.getElementById('relatorioContainer');
+        const validationMsgBox = document.getElementById('validationMessageBox');
+        const validationDateSpan = document.getElementById('validationDate');
+        const btn = document.getElementById('btnValidarAssinaturas');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const btnText = document.getElementById('btnText');
+        
+        // Reset status na tabela
+        const statusCells = ['validStatus1', 'validStatus2', 'validStatus3'];
+        statusCells.forEach(id => {
+            const cell = document.getElementById(id);
+            cell.innerHTML = '<span class="status-pending">-</span>';
+        });
+        
+        // Reset detalhes nas abas
+        const detailStatuses = ['detailStatus1', 'detailStatus2', 'detailStatus3'];
+        detailStatuses.forEach(id => {
+            const detail = document.getElementById(id);
+            if(detail) detail.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
+        });
+        
+        // Reset das abas de análise (esconder todas)
+        for (let i = 1; i <= 3; i++) {
+            const analysisCollapse = document.getElementById(`analysisCollapse${i}`);
+            if (analysisCollapse) {
+                analysisCollapse.style.display = 'none';
+            }
+        }
+        
+        validationDateSpan.innerText = '--/--/---- --:--:--';
+        validationMsgBox.classList.remove('show', 'success', 'warning');
+        
+        relatorio.style.display = 'none';
+        btnRelatorio.style.display = 'none';
+        btnRelatorio.innerText = "Visualizar Relatório de Conformidade";
+        
+        // Habilitar botão de validação
+        if(btn) btn.disabled = false;
+        if(btnSpinner) btnSpinner.style.display = 'none';
+        if(btnText) btnText.style.opacity = '1';
+    }
+    
     function toggleRelatorio() {
         const relatorio = document.getElementById("relatorioContainer");
         const btnRelatorio = document.getElementById("btnRelatorio");
@@ -536,7 +730,7 @@
             btnRelatorio.innerText = "Visualizar Relatório de Conformidade";
         }
     }
-
+    
     function openTab(evt, tabName) {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
@@ -557,47 +751,15 @@
             evt.currentTarget.classList.add("active");
         }
     }
-
+    
     function closeModal() {
         const modal = document.querySelector('.ui-dialog');
         if(modal) modal.style.display = 'none';
         alert("Modal fechado.");
     }
-
+    
     window.onload = function() {
-        const relatorio = document.getElementById("relatorioContainer");
-        const btnRelatorio = document.getElementById("btnRelatorio");
-        const validationMsg = document.getElementById("validationSuccessMsg");
-        
-        relatorio.style.display = "none";
-        btnRelatorio.style.display = "none";
-        validationMsg.classList.remove("show");
-        
-        const status1 = document.getElementById("validStatus1");
-        const status2 = document.getElementById("validStatus2");
-        const status3 = document.getElementById("validStatus3");
-        
-        status1.innerHTML = '<span class="status-pending">-</span>';
-        status2.innerHTML = '<span class="status-pending">-</span>';
-        status3.innerHTML = '<span class="status-pending">-</span>';
-        
-        const detail1 = document.getElementById("detailStatus1");
-        const detail2 = document.getElementById("detailStatus2");
-        const detail3 = document.getElementById("detailStatus3");
-        
-        if(detail1) detail1.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
-        if(detail2) detail2.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
-        if(detail3) detail3.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
-        
-        const validationDateSpan = document.getElementById("validationDate");
-        validationDateSpan.innerText = '--/--/---- --:--:--';
-        
-        const btn = document.getElementById('btnValidarAssinaturas');
-        const btnSpinner = document.getElementById('btnSpinner');
-        const btnText = document.getElementById('btnText');
-        if(btn) btn.disabled = false;
-        if(btnSpinner) btnSpinner.style.display = 'none';
-        if(btnText) btnText.style.opacity = '1';
+        resetUI();
     };
 </script>
 </body>
