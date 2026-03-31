@@ -464,8 +464,7 @@
                 <details class="docz-collapse" id="analysisCollapse1" style="display: none;">
                     <summary>Análise de Integridade</summary>
                     <div class="collapse-content">
-                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.<br>
-                        <strong>Recomendação:</strong> Verificar a integridade da cadeia de certificação e a presença dos atributos obrigatórios.
+                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.
                     </div>
                 </details>
             </div>
@@ -494,11 +493,10 @@
                         <strong>Opcionais:</strong> Não possui.
                     </div>
                 </details>
-                <details class="docz-collapse">
+                <details class="docz-collapse" id="analysisCollapse2" style="display: none;">
                     <summary>Análise de Integridade</summary>
                     <div class="collapse-content">
-                        <strong>Mensagem:</strong> Foi detectada alteração no conteúdo do documento após a aplicação desta assinatura.<br>
-                        <strong>Recomendação:</strong> Verificar versões anteriores do documento.
+                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.
                     </div>
                 </details>
             </div>
@@ -538,8 +536,7 @@
                 <details class="docz-collapse" id="analysisCollapse3" style="display: none;">
                     <summary>Análise de Integridade</summary>
                     <div class="collapse-content">
-                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.<br>
-                        <strong>Recomendação:</strong> Verificar a integridade da cadeia de certificação e a presença dos atributos obrigatórios.
+                        <strong>Mensagem:</strong> Impossibilidade de determinar validade por falta de objeto crítico.
                     </div>
                 </details>
             </div>
@@ -555,24 +552,8 @@
 </div>
 
 <script>
-    // Função para executar cenário específico
-    function runScenario(scenario) {
-        if (scenario === 'allValid') {
-            executarValidacaoComResultados([
-                { status: 'valid', text: 'Válida', class: 'status-valid' },
-                { status: 'valid', text: 'Válida', class: 'status-valid' },
-                { status: 'valid', text: 'Válida', class: 'status-valid' }
-            ], true);
-        } else {
-            executarValidacaoComResultados([
-                { status: 'valid', text: 'Válida', class: 'status-valid' },
-                { status: 'invalid', text: 'Inválida', class: 'status-invalid' },
-                { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' }
-            ], false);
-        }
-    }
-    
-    // Função para controlar exibição da aba de análise baseada no status
+    // Função para controlar exibição da aba "Análise de Integridade" baseada no status
+    // Regra: aparece APENAS quando o status for "indeterminate"
     function toggleAnalysisTab(status, tabIndex) {
         const analysisCollapse = document.getElementById(`analysisCollapse${tabIndex}`);
         if (analysisCollapse) {
@@ -615,7 +596,7 @@
                 }
             });
             
-            // Atualizar status detalhado nas abas e controlar aba de análise
+            // Atualizar status detalhado nas abas
             const detailStatusMap = [detailStatus1, detailStatus2, detailStatus3];
             results.forEach((result, idx) => {
                 if (detailStatusMap[idx]) {
@@ -633,7 +614,7 @@
                     }
                     detailStatusMap[idx].innerHTML = `<span class="${cssClass}">${displayText}</span>`;
                 }
-                // Controlar exibição da aba de análise (índice +1 porque as abas são 1,2,3)
+                // Controla exibição da aba "Análise de Integridade" conforme status (aparece só se for Indeterminada)
                 toggleAnalysisTab(result.status, idx + 1);
             });
             
@@ -667,10 +648,34 @@
         }, 1500);
     }
     
-    // Função de validação padrão (quando clica no botão azul)
+    // Função de validação padrão (quando clica no botão azul) - cenário com não conformidades
     function validarAssinaturas() {
-        // Por padrão, usamos o cenário com não conformidades
-        runScenario('withNonConformity');
+        // Usando cenário com: Assinatura 1 = Indeterminada, 2 = Inválida, 3 = Indeterminada (para demonstrar)
+        // Isso atenderá a regra: para "Indeterminada" exibe a aba Análise de Integridade, para "Inválida" não exibe.
+        const customResults = [
+            { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' },
+            { status: 'invalid', text: 'Inválida', class: 'status-invalid' },
+            { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' }
+        ];
+        executarValidacaoComResultados(customResults, false);
+    }
+    
+    // Cenário com todas válidas (nenhuma aba de análise deve aparecer)
+    function runScenario(scenario) {
+        if (scenario === 'allValid') {
+            executarValidacaoComResultados([
+                { status: 'valid', text: 'Válida', class: 'status-valid' },
+                { status: 'valid', text: 'Válida', class: 'status-valid' },
+                { status: 'valid', text: 'Válida', class: 'status-valid' }
+            ], true);
+        } else {
+            // Cenário com não conformidades: 1 indeterminada, 2 inválida, 3 indeterminada para demonstrar a regra
+            executarValidacaoComResultados([
+                { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' },
+                { status: 'invalid', text: 'Inválida', class: 'status-invalid' },
+                { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' }
+            ], false);
+        }
     }
     
     // Reset da interface para estado inicial
@@ -697,7 +702,7 @@
             if(detail) detail.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
         });
         
-        // Reset das abas de análise (esconder todas)
+        // Reset das abas de análise (esconder todas) - regra: só exibe quando for indeterminada após validação
         for (let i = 1; i <= 3; i++) {
             const analysisCollapse = document.getElementById(`analysisCollapse${i}`);
             if (analysisCollapse) {
@@ -710,58 +715,46 @@
         
         relatorio.style.display = 'none';
         btnRelatorio.style.display = 'none';
-        btnRelatorio.innerText = "Visualizar Relatório de Conformidade";
-        
-        // Habilitar botão de validação
-        if(btn) btn.disabled = false;
-        if(btnSpinner) btnSpinner.style.display = 'none';
-        if(btnText) btnText.style.opacity = '1';
+
+        // Reset botão
+        btn.disabled = false;
+        btnSpinner.style.display = 'none';
+        btnText.style.opacity = '1';
     }
-    
+
+    // Mostrar / esconder relatório
     function toggleRelatorio() {
-        const relatorio = document.getElementById("relatorioContainer");
-        const btnRelatorio = document.getElementById("btnRelatorio");
-        
-        if (relatorio.style.display === "none" || relatorio.style.display === "") {
-            relatorio.style.display = "block";
-            relatorio.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            btnRelatorio.innerText = "Ocultar Relatório de Conformidade";
+        const relatorio = document.getElementById('relatorioContainer');
+        if (relatorio.style.display === 'none' || relatorio.style.display === '') {
+            relatorio.style.display = 'block';
+            relatorio.scrollIntoView({ behavior: 'smooth' });
         } else {
-            relatorio.style.display = "none";
-            btnRelatorio.innerText = "Visualizar Relatório de Conformidade";
+            relatorio.style.display = 'none';
         }
     }
-    
-    function openTab(evt, tabName) {
-        let i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tab-content");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-            tabcontent[i].classList.remove("active");
-        }
-        tablinks = document.getElementsByClassName("tab-btn");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active");
-        }
-        const selectedTab = document.getElementById(tabName);
-        if (selectedTab) {
-            selectedTab.style.display = "block";
-            selectedTab.classList.add("active");
-        }
-        if (evt && evt.currentTarget) {
-            evt.currentTarget.classList.add("active");
-        }
+
+    // Controle de abas
+    function openTab(evt, tabId) {
+        const tabContents = document.querySelectorAll('.tab-content');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+
+        tabContents.forEach(tab => tab.classList.remove('active'));
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
     }
-    
+
+    // Simula fechar modal
     function closeModal() {
-        const modal = document.querySelector('.ui-dialog');
-        if(modal) modal.style.display = 'none';
-        alert("Modal fechado.");
+        const dialog = document.querySelector('.ui-dialog');
+        dialog.style.display = 'none';
     }
-    
-    window.onload = function() {
+
+    // Inicialização (garante estado correto ao abrir)
+    document.addEventListener('DOMContentLoaded', () => {
         resetUI();
-    };
+    });
 </script>
 </body>
 </html>
