@@ -151,14 +151,21 @@
             transition: opacity 0.2s;
         }
         .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; color: #fff; }
-        .blueB {
-            background-position: 0 -395px;
-            border: 1px solid #93682b;
+        /* Botão azul escuro (substituindo o laranja) */
+        .dblueB {
+            background-position: 0 -680px;
+            border: 1px solid #2e6691;
             color: #fff;
         }
         .grayB {
             background-position: 0 -365px;
             border: 1px solid #888888;
+            color: #fff;
+        }
+        /* Botão vermelho para baixar PDF */
+        .redB {
+            background-position: 0 -170px;
+            border: 1px solid #9f352b;
             color: #fff;
         }
         .button:active { opacity: 0.8; }
@@ -320,9 +327,10 @@
             background-position: 0 -425px;
             border-color: #7ca82a;
         }
-        .toolbar-btn-orange {
-            background-position: 0 -170px;
-            border-color: #93682b;
+        /* Botão azul escuro na barra inferior (substituindo laranja) */
+        .toolbar-btn-dblue {
+            background-position: 0 -680px;
+            border-color: #2e6691;
         }
         .toolbar-btn-gray {
             background-position: 0 -256px;
@@ -393,11 +401,12 @@
         </div>
 
         <div class="dialog-footer">
-            <button id="btnValidarAssinaturas" class="button blueB" onclick="validarAssinaturas()">
+            <button id="btnValidarAssinaturas" class="button dblueB" onclick="validarAssinaturas()">
                 <span id="btnText">Validar Assinaturas</span>
                 <span id="btnSpinner" style="display: none;" class="spinner"></span>
             </button>
             <button id="btnRelatorio" class="button greenB" style="display: none;" onclick="toggleRelatorio()">Visualizar Relatório de Conformidade</button>
+            <button id="btnDownloadPdf" class="button redB" style="display: none;" onclick="downloadPDF()">Baixar Relatório PDF</button>
         </div>
 
         <div id="relatorioContainer">
@@ -547,13 +556,16 @@
 <!-- Barra de ferramentas inferior - estilo sistema -->
 <div class="toolbar-bottom">
     <button class="toolbar-btn toolbar-btn-green" onclick="runScenario('allValid')">Todas Válidas</button>
-    <button class="toolbar-btn toolbar-btn-orange" onclick="runScenario('withNonConformity')">Com Não Conformidades</button>
+    <button class="toolbar-btn toolbar-btn-dblue" onclick="runScenario('withNonConformity')">Com Não Conformidades</button>
     <button class="toolbar-btn toolbar-btn-gray" onclick="resetUI()">Resetar Interface</button>
 </div>
 
 <script>
+    // Variável global para armazenar os resultados atuais (para o PDF)
+    let currentValidationResults = null;
+    let currentAllValidFlag = false;
+
     // Função para controlar exibição da aba "Análise de Integridade" baseada no status
-    // Regra: aparece APENAS quando o status for "indeterminate"
     function toggleAnalysisTab(status, tabIndex) {
         const analysisCollapse = document.getElementById(`analysisCollapse${tabIndex}`);
         if (analysisCollapse) {
@@ -571,6 +583,7 @@
         const btnText = document.getElementById('btnText');
         const btnSpinner = document.getElementById('btnSpinner');
         const btnRelatorio = document.getElementById('btnRelatorio');
+        const btnDownloadPdf = document.getElementById('btnDownloadPdf');
         const validationMsgBox = document.getElementById('validationMessageBox');
         const validationMsgText = document.getElementById('validationMessageText');
         const validStatus1 = document.getElementById('validStatus1');
@@ -580,6 +593,10 @@
         const detailStatus2 = document.getElementById('detailStatus2');
         const detailStatus3 = document.getElementById('detailStatus3');
         const validationDateSpan = document.getElementById('validationDate');
+        
+        // Armazenar resultados para geração do PDF
+        currentValidationResults = results;
+        currentAllValidFlag = allValid;
         
         // Desabilitar botão durante validação
         btn.disabled = true;
@@ -614,7 +631,7 @@
                     }
                     detailStatusMap[idx].innerHTML = `<span class="${cssClass}">${displayText}</span>`;
                 }
-                // Controla exibição da aba "Análise de Integridade" conforme status (aparece só se for Indeterminada)
+                // Controla exibição da aba "Análise de Integridade" conforme status
                 toggleAnalysisTab(result.status, idx + 1);
             });
             
@@ -635,8 +652,9 @@
             }
             validationMsgBox.classList.add('show');
             
-            // Mostrar botão de relatório
+            // Mostrar botões de relatório e download PDF
             btnRelatorio.style.display = 'inline-flex';
+            btnDownloadPdf.style.display = 'inline-flex';
             
             // Reativar botão
             btn.disabled = false;
@@ -648,10 +666,8 @@
         }, 1500);
     }
     
-    // Função de validação padrão (quando clica no botão azul) - cenário com não conformidades
+    // Função de validação padrão (quando clica no botão azul escuro) - cenário com não conformidades
     function validarAssinaturas() {
-        // Usando cenário com: Assinatura 1 = Indeterminada, 2 = Inválida, 3 = Indeterminada (para demonstrar)
-        // Isso atenderá a regra: para "Indeterminada" exibe a aba Análise de Integridade, para "Inválida" não exibe.
         const customResults = [
             { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' },
             { status: 'invalid', text: 'Inválida', class: 'status-invalid' },
@@ -660,7 +676,7 @@
         executarValidacaoComResultados(customResults, false);
     }
     
-    // Cenário com todas válidas (nenhuma aba de análise deve aparecer)
+    // Cenário com todas válidas
     function runScenario(scenario) {
         if (scenario === 'allValid') {
             executarValidacaoComResultados([
@@ -669,7 +685,6 @@
                 { status: 'valid', text: 'Válida', class: 'status-valid' }
             ], true);
         } else {
-            // Cenário com não conformidades: 1 indeterminada, 2 inválida, 3 indeterminada para demonstrar a regra
             executarValidacaoComResultados([
                 { status: 'indeterminate', text: 'Indeterminada', class: 'status-indeterminate' },
                 { status: 'invalid', text: 'Inválida', class: 'status-invalid' },
@@ -678,9 +693,18 @@
         }
     }
     
+    // Função para gerar e baixar o relatório PDF
+    function downloadPDF() {
+    const link = document.createElement('a');
+    link.href = 'relatorio.pdf'; // arquivo na mesma pasta
+    link.download = 'relatorio.pdf';
+    link.click();
+}
+    
     // Reset da interface para estado inicial
     function resetUI() {
         const btnRelatorio = document.getElementById('btnRelatorio');
+        const btnDownloadPdf = document.getElementById('btnDownloadPdf');
         const relatorio = document.getElementById('relatorioContainer');
         const validationMsgBox = document.getElementById('validationMessageBox');
         const validationDateSpan = document.getElementById('validationDate');
@@ -702,7 +726,7 @@
             if(detail) detail.innerHTML = '<span class="status-pending">Indeterminada (validação pendente)</span>';
         });
         
-        // Reset das abas de análise (esconder todas) - regra: só exibe quando for indeterminada após validação
+        // Reset das abas de análise
         for (let i = 1; i <= 3; i++) {
             const analysisCollapse = document.getElementById(`analysisCollapse${i}`);
             if (analysisCollapse) {
@@ -715,7 +739,12 @@
         
         relatorio.style.display = 'none';
         btnRelatorio.style.display = 'none';
-
+        btnDownloadPdf.style.display = 'none';
+        
+        // Reset variáveis
+        currentValidationResults = null;
+        currentAllValidFlag = false;
+        
         // Reset botão
         btn.disabled = false;
         btnSpinner.style.display = 'none';
@@ -751,7 +780,7 @@
         dialog.style.display = 'none';
     }
 
-    // Inicialização (garante estado correto ao abrir)
+    // Inicialização
     document.addEventListener('DOMContentLoaded', () => {
         resetUI();
     });
