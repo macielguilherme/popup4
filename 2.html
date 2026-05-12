@@ -358,6 +358,11 @@
         </div>
     </div>
     <div id="dialogHistoricoAssinaturas" class="ui-dialog-content ui-widget-content">
+
+        <!-- Mensagem que aparece após validação (dinâmica) -->
+        <div id="validationMessageBox" class="validation-message">
+            <span id="validationMessageText"></span>
+        </div>
         <div class="widget">
             <div class="title"><h6>DC00146G20052979SOS_2_NORMAL.pdf</h6></div>
             <table class="sTable">
@@ -400,10 +405,7 @@
             </table>
         </div>
 
-        <!-- Mensagem que aparece após validação (dinâmica) -->
-        <div id="validationMessageBox" class="validation-message">
-            <span id="validationMessageText"></span>
-        </div>
+        
 
         <div class="dialog-footer">
             <button id="btnValidarAssinaturas" class="button dblueB" onclick="validarAssinaturas()">
